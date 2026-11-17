@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MapleFolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f2f6fa;--panel:#ffffff;--ink:#12212e;--mute:#5a6b7a;--line:#d5dfe8;--acc:#1769aa;--acc2:#b45309;
+--c1:#1769aa;--c2:#c8963a;--c3:#2f9e8f;--c4:#b45309;--c5:#6a5acd;--c6:#8a98a5;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e161d;--panel:#15212b;--ink:#e8eff5;--mute:#9fb0bf;--line:#25333f;--acc:#5aaef0;--acc2:#f0a35c;--c1:#5aaef0;--c2:#e0b25a;--c3:#4cc2b2;--c4:#f0a35c;--c5:#9a8cf0;--c6:#7d8d99;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e161d;--panel:#15212b;--ink:#e8eff5;--mute:#9fb0bf;--line:#25333f;--acc:#5aaef0;--acc2:#f0a35c;--c1:#5aaef0;--c2:#e0b25a;--c3:#4cc2b2;--c4:#f0a35c;--c5:#9a8cf0;--c6:#7d8d99;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{border-top:6px solid var(--acc)}
+@media(pointer:coarse){.btn,input,select,.x{min-height:44px}}
+#fan text{font-size:15px}.legend{font-size:14px}
+.panel{border-radius:14px;border-color:transparent;box-shadow:0 1px 3px rgba(20,40,60,.1);padding:22px}.panel+.panel{margin-top:12px}.stats{border-color:transparent;box-shadow:0 1px 3px rgba(20,40,60,.1);border-radius:14px}.wrap{padding-top:36px}
+#sum{font-size:17px;line-height:1.55}
+details.sec{padding:0}details.sec>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;font:600 19px/1.2 Newsreader,Georgia,serif}details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::after{content:"+";font:400 24px sans-serif;color:var(--mute)}details.sec[open]>summary::after{content:"–"}details.sec>.in{padding:0 22px 22px}
+details.panel summary{cursor:pointer;font-weight:600}#mkt{display:none}#bt{display:none}details.sec>summary{padding:12px 18px;font-size:17px}#more-tools>.in{padding-top:0}#more-tools>.in>details.sec{box-shadow:none;border:1px solid var(--line);margin-top:10px}details.panel ol{margin:8px 0 0;padding-left:20px}
+h1{display:flex;align-items:center;gap:10px}
+.leaf{width:1.15em;height:1.15em;flex:none;fill:var(--acc)}
+.leaf .lf{fill:var(--acc);stroke:var(--acc);stroke-width:3;stroke-linejoin:round}
+.leaf .tr{fill:none;stroke:var(--panel);stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:100;animation:mfdraw 1.2s cubic-bezier(.3,.7,.2,1) .4s both}
+.leaf .tp{fill:var(--panel);transform-box:fill-box;transform-origin:center;animation:mftip .4s ease-out 1.5s both}
+@keyframes mfdraw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes mftip{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.leaf .tr,.leaf .tp{animation:none}.leaf .tr{stroke-dasharray:none}}
+.maple{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:2px 10px;margin:0 0 10px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 18px 48px}
+h1{font:600 clamp(28px,5vw,40px)/1.1 Newsreader,Georgia,serif;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 24px;max-width:62ch}
+.grid{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:18px;align-items:start}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.panel+.panel{margin-top:12px}
+h2{font:600 19px/1.2 Newsreader,Georgia,serif;margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:4px}
+input,select,button{font:inherit;color:var(--ink)}
+input,select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.hold{display:grid;grid-template-columns:1fr 78px 30px;gap:8px;margin-bottom:8px;align-items:center}
+.x{background:none;border:1px solid var(--line);border-radius:6px;height:34px;cursor:pointer;color:var(--mute)}
+.x:hover{color:var(--acc2);border-color:var(--acc2)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 11px;cursor:pointer;font-size:13px}
+.btn:hover{border-color:var(--acc)}
+.btn.main{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:600}
+.tot{font-size:13px;margin-top:10px;color:var(--mute)}.tot b{color:var(--ink)}.tot.bad b{color:var(--acc2)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border:1px solid var(--line);border-radius:10px;background:var(--panel);margin-bottom:18px;overflow:hidden}
+.stat{padding:14px 16px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .v{font:600 28px/1.1 Newsreader,Georgia,serif}
+.stat .k{font-size:13px;color:var(--mute)}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--mute);font:11px "Instrument Sans",sans-serif}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--mute);margin-top:6px}
+.sw{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.bars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+@media(max-width:640px){.bars{grid-template-columns:1fr}}
+.bar{display:grid;grid-template-columns:96px 1fr 44px;gap:8px;align-items:center;font-size:13px;margin-bottom:7px}
+.track{height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
+.fill{height:100%;border-radius:5px}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.notes p{margin:0 0 9px;padding-left:12px;border-left:3px solid var(--acc)}
+.notes p.w{border-color:var(--acc2)}
+.fine{font-size:12px;color:var(--mute);margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:right;padding:6px 4px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}th{color:var(--mute);font-weight:500}
+.scroll{overflow-x:auto}
+.pies{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.pie{cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.pie.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.pie svg{display:block;width:100%;max-width:170px;margin:0 auto 8px}
+.lg{display:flex;flex-wrap:wrap;gap:3px 10px;justify-content:center;font-size:12px;color:var(--mute)}
+.lg .sw{margin-right:4px}
+#src summary{cursor:pointer;font:600 15px Newsreader,Georgia,serif;margin-bottom:6px}#src summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}#src{font-size:11px;line-height:1.35;padding:12px 16px}#src h2{font-size:15px;margin-bottom:6px}#src .fine{font-size:11px;margin-bottom:6px}#src a{color:var(--acc)}#src ul{padding-left:16px;margin:3px 0 8px}#src li{margin-bottom:2px;font-size:11px}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}.hd-l{flex:1 1 380px;min-width:0}.hd-r{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;padding-top:4px}
+details.mini{position:relative}details.mini>summary{cursor:pointer;list-style:none;font:600 13px/1 'Instrument Sans',system-ui,sans-serif;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);white-space:nowrap}details.mini>summary::-webkit-details-marker{display:none}details.mini>summary::after{content:" \25BE";color:var(--mute)}details.mini[open]>summary::after{content:" \25B4"}details.mini>summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+details.mini>.mc{position:absolute;right:0;top:calc(100% + 6px);width:min(340px,86vw);z-index:20;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:12px 16px;font-size:13px;line-height:1.45}details.mini .mc ol{margin:0;padding-left:18px}details.mini .mc p{margin:8px 0 0}
+.wrap{position:relative;z-index:1}
+.hd-r .btn{font:600 13px/1 'Instrument Sans',system-ui,sans-serif;padding:8px 12px;border-radius:999px;background:var(--panel);color:var(--ink);white-space:nowrap}.hd-r .btn:hover{border-color:var(--acc);color:var(--acc)}
+.wrap{padding-top:26px}.hd{margin-bottom:6px}.sub{margin-bottom:18px}
+.foot{max-width:1120px;margin:0 auto;padding:0 18px 40px;position:relative;z-index:1;font-size:12px;line-height:1.5;color:var(--mute)}.foot hr{border:0;border-top:1px solid var(--line);margin:0 0 14px}
+.welcome{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 16px;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}.welcome[hidden]{display:none}.welcome p{margin:0;flex:1 1 300px;font-size:14px;line-height:1.45}
+.swipe{display:none;margin-top:6px}
+@media(max-width:640px){
+.wrap{padding-left:14px;padding-right:14px}
+.panel{padding:16px}
+.sub{max-width:none}
+.hd-r{width:100%;justify-content:flex-start;position:relative}
+details.mini{position:static}
+details.mini>.mc{left:0;right:0;width:auto}
+.hd-r .btn,details.mini>summary{padding:11px 14px}
+.cw .chart,#bt svg.chart{min-width:560px}
+#bt{overflow-x:auto}
+.swipe{display:block}
+.foot{padding-left:14px;padding-right:14px}
+}
+@media(max-width:480px){.row3{grid-template-columns:1fr 1fr}.pies{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<svg aria-hidden="true" viewBox="0 0 100 100" style="position:fixed;right:-70px;bottom:-70px;width:540px;height:540px;z-index:0;pointer-events:none;opacity:.045;fill:var(--acc)"><polygon points="50,2 60,20 68,15 66,38 80,32 76,42 98,48 88,60 92,66 78,72 80,78 56,76 56,98 44,98 44,76 20,78 22,72 8,66 12,60 2,48 24,42 20,32 34,38 32,15 40,20"/></svg>
+<div class="wrap">
+<div class="hd"><div class="hd-l">
+<div class="maple">TFSA · RRSP · TSX ready</div>
+<h1><svg class="leaf" viewBox="-2 -2 104 104" aria-hidden="true"><polygon class="lf" points="50,2 60,20 68,15 66,38 80,32 76,42 98,48 88,60 92,66 78,72 80,78 56,76 56,98 44,98 44,76 20,78 22,72 8,66 12,60 2,48 24,42 20,32 34,38 32,15 40,20"/><polyline class="tr" pathLength="100" points="28,64 42,52 52,58 72,36"/><circle class="tp" cx="72" cy="36" r="4.2"/></svg>MapleFolio</h1>
+<p class="sub">Build a mix of ETFs and stocks and see what it could grow to. <span style="font-size:12px">Educational estimate, not financial advice.</span></p>
+</div><div class="hd-r">
+<details class="mini"><summary>New here? Start in three steps</summary><div class="mc"><ol><li>Pick tab A, B or C and a starting mix, or type your own tickers.</li><li>Set your account type, starting amount, monthly add and years.</li><li>Read the plain-English summary, then compare your mixes below.</li></ol><p class="fine">Hover a result label for a definition.</p></div></details>
+<details class="mini"><summary>Which account for what?</summary><div class="mc"><p class="fine">TFSA: growth and withdrawals are tax-free, so it suits your highest-growth holdings; US dividends still lose about 15% to withholding. RRSP: contributions reduce your taxable income, and US-listed ETFs avoid the 15% US dividend withholding there. Taxable: Canadian dividend stocks get a tax credit, so they fit here. US accounts (401(k), IRA, Roth IRA) are for US taxpayers; Roth withdrawals in retirement are tax-free. FHSA: for a first home; contributions are deductible and growth and qualifying withdrawals are tax-free. RESP: for a child’s education; the government adds a grant on contributions. General education, not tax advice.</p></div></details><button class="btn" id="th" aria-label="Switch light or dark theme">Light / dark</button>
+</div></div>
+<div class="welcome" id="welcome" hidden><p><b>New here?</b> Pick a ready-made mix, then change anything you like.</p><div class="btns" style="margin:0"><button class="btn" data-t="All-in-one equity">All-in-one equity</button><button class="btn" data-t="Balanced all-in-one">Balanced all-in-one</button><button class="btn" data-t="Canadian core">Canadian core</button><button class="btn" id="wx" aria-label="Dismiss welcome message">Dismiss</button></div></div>
+<div class="grid">
+<div>
+<details class="panel sec" id="tfsa-calc"><summary>TFSA contribution room</summary><div class="in"><p class="fine" style="margin-top:0">Estimate how much TFSA room you have left in 2026. Nothing you type leaves this page.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px"><div><label for="tc-birth">Birth year</label><input id="tc-birth" type="number" inputmode="numeric" value="1995" min="1900" max="2026"></div><div><label for="tc-res">Became a resident (year)</label><input id="tc-res" type="number" inputmode="numeric" placeholder="Optional" min="2009" max="2026"></div><div><label for="tc-con">Total contributions ($)</label><input id="tc-con" type="text" inputmode="numeric" value="0"></div><div><label for="tc-wd">Withdrawals before 2026 ($)</label><input id="tc-wd" type="text" inputmode="numeric" value="0"></div><div><label for="tc-wd26">Withdrawals in 2026 ($)</label><input id="tc-wd26" type="text" inputmode="numeric" value="0"></div></div><p class="fine">Count all TFSAs and all years. Room starts the year you turn 18 (earliest 2009).</p><div style="text-align:center;margin:14px 0"><div class="fine" style="margin:0">Estimated room available now</div><div id="tc-room" style="font:700 34px/1.2 Newsreader,Georgia,serif;color:var(--acc)">$0</div><div id="tc-sub" class="fine" style="margin:4px 0 0"></div></div><div id="tc-rows" class="fine" style="font-size:13px;color:var(--ink)"></div><div id="tc-warn" style="color:var(--acc2);font-size:13px;margin-top:8px"></div><p class="fine">Not financial advice. Your official room is in CRA My Account. The 2027 limit is not included. Over-contributions are taxed at 1% per month on the excess above a $2,000 buffer (CRA).</p></div></details>
+<section class="panel">
+<h2>Your portfolios</h2><div class="btns" id="tabs" style="margin:0 0 14px"></div>
+<div class="row3">
+<div><label for="val">Starting value ($)</label><input id="val" type="number" min="0" step="1000" value="50000"></div>
+<div><label for="con">Monthly add ($)</label><input id="con" type="number" min="0" step="50" value="500"></div>
+<div><label for="yrs">Years</label><input id="yrs" type="number" min="1" max="50" value="20"></div>
+</div>
+<div class="row3"><div><label for="acct">Account type</label><select id="acct"><option value="tfsa" selected>TFSA</option><option value="rrsp">RRSP</option><option value="fhsa">FHSA</option><option value="resp">RESP</option><option value="tax">Taxable</option><option value="k401">401(k)</option><option value="roth">Roth IRA</option><option value="ira">Traditional IRA</option></select></div><div><label for="tr">Tax rate (%)</label><input id="tr" type="number" min="0" max="60" value="35"></div><div><label for="inf">Inflation (%)</label><input id="inf" type="number" min="0" max="15" step="0.1" value="2"></div></div><label style="display:flex;gap:8px;align-items:center;margin:-6px 0 14px;color:var(--ink)"><input type="checkbox" id="real" style="width:auto">Show results in today’s dollars</label>
+<p class="fine" id="room" aria-live="polite" hidden style="margin:-6px 0 14px"></p>
+<label for="pn">Portfolio name</label><input id="pn" maxlength="24" style="margin-bottom:12px"><datalist id="tk"></datalist><div id="holds"></div>
+<div class="hold" style="grid-template-columns:1fr auto;margin-top:6px"><input id="nt" list="tk" placeholder="Add any ticker, e.g. AAPL, RY, SCHD" aria-label="Ticker to add" autocomplete="off"><button class="btn main" id="add">Add</button></div><div class="btns" style="margin-top:2px"><button class="btn" id="norm">Make weights total 100%</button></div><details style="margin-top:6px"><summary style="cursor:pointer;font-size:13px;color:var(--mute)">More actions</summary><div class="btns"><button class="btn" id="shr">Copy share link</button><button class="btn" id="csv">Export CSV</button><button class="btn" id="rst">Reset everything</button></div></details><div class="tot" id="addmsg"></div>
+<div class="tot" id="tot"></div>
+<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Start from a template</summary><div class="btns" id="tpl"></div></details>
+</section>
+<section class="panel" id="mkt">
+<h2>Real market data</h2>
+<p class="fine" style="margin-top:0">Replace the built-in assumptions with real history from Yahoo Finance. Download the ticker list, run build_market_data.py next to it, then load the market-data.json it creates. The file stays in your browser.</p>
+<div class="btns"><button class="btn" id="dlt">Download ticker list</button><label class="btn" for="mf" style="margin:0;color:var(--ink);cursor:pointer">Load market-data.json</label><input type="file" id="mf" accept=".json,application/json" hidden></div>
+<div class="tot" id="mst">Using built-in assumptions.</div>
+<div class="tot"><label style="display:flex;gap:8px;align-items:center;margin:0"><input type="checkbox" id="raw" style="width:auto">Use raw historical returns (otherwise blended 50/50 with the assumptions)</label></div>
+</section>
+<section class="panel">
+<h2>Assumptions</h2>
+<div class="scroll"><table id="assume"></table></div>
+<p class="fine">Expected return, volatility and yield are rounded long-run estimates I chose for illustration; they are not sourced forecasts. Expense ratios were checked against the sources listed below (Nov 2026), but check each fund’s current fact sheet before acting. Individual stocks use their sector’s average assumptions, not company-specific figures, and carry no fee. Crypto assets use my own rough placeholder return and volatility, with no fee or yield (staking rewards are ignored), and are priced in US dollars on Yahoo. Every value in the table is editable (type, class, region, fee, return, volatility, yield); your edits and portfolios are saved in this browser and take priority over loaded market data.</p>
+</section>
+</div>
+<div>
+<div class="panel" id="sum" style="margin-bottom:18px"></div>
+<div class="stats" id="stats"></div>
+<section class="panel">
+<h2>Where it could go in <span id="yl"></span> years<span id="rl" style="font-weight:400;font-size:14px;color:var(--mute)"></span></h2>
+<div class="tot" id="fr" style="margin:0 0 6px;min-height:2.6em">Move over or tap the chart to see any year.</div>
+<div class="cw scroll"><svg class="chart" id="fan" viewBox="0 0 640 320" role="img" aria-label="Projected portfolio value range"></svg></div><p class="fine swipe">Swipe sideways to see the whole chart.</p>
+<div class="legend"><span><i class="sw" style="background:var(--acc);height:4px"></i>Typical result (median)</span><span><i class="sw" style="background:var(--acc);opacity:.3;height:10px"></i>Likely range (middle 80%)</span><span><i class="sw" style="background:var(--acc2)"></i>Typical result with no fees</span><span><i class="sw" style="background:var(--mute)"></i>Money you put in</span></div>
+<div class="notes" id="fee" style="margin-top:14px"></div>
+</section>
+<section class="panel">
+<h2>What you hold</h2>
+<div class="bars"><div><label>By asset class</label><div id="b1"></div></div><div><label>By region</label><div id="b2"></div></div></div>
+</section>
+<section class="panel"><h2>Save or email this portfolio</h2><p class="fine" style="margin-top:0">Saved automatically in this browser.</p><label for="ea">Your email address</label><input id="ea" type="email" placeholder="name@example.com" autocomplete="email"><div class="btns"><button class="btn main" id="em">Email me this portfolio</button><button class="btn" id="cp">Copy summary</button><a id="ml" hidden target="_blank" rel="noopener"></a></div><div class="tot" id="emsg"></div><p class="fine">Opens your own email app. This page never sees your address.</p></section>
+<section class="panel"><h2>Portfolio mixes</h2><div class="pies" id="pies"></div></section>
+<section class="panel" id="bt"><h2>Backtest and correlations</h2><p class="fine" style="margin-top:0">Replays portfolios A, B and C through real monthly returns (dividends included) while every holding has data. Ignores taxes, trading costs and account type. Past results do not predict future returns.</p><label for="btm">Rebalance</label><select id="btm" style="max-width:160px"><option value="y">Yearly</option><option value="q">Quarterly</option><option value="m">Monthly</option><option value="n">Never</option><option value="b">When 5 points or 25% off target (bands)</option></select><label style="display:flex;gap:8px;align-items:center;margin:10px 0;color:var(--ink)"><input type="checkbox" id="btc" style="width:auto" checked>Use my starting amount and monthly contribution</label><div id="bt"></div><p style="margin:16px 0 6px"><b>Correlations in the selected portfolio</b></p><div class="scroll"><table id="hm"></table></div><p class="fine" id="hmn"></p></section>
+<section class="panel"><h2>Example portfolios by risk level</h2><p class="fine" style="margin-top:0">Three starting mixes, from most growth to most safety. Load one, then change it. Illustrations, not advice.</p><div id="ex"></div></section>
+<section class="panel"><h2>Rebalance this portfolio</h2><p class="fine" style="margin-top:0">Enter what you hold now to see what to buy or sell to reach your targets. The last column splits new cash without selling.</p><label for="rc">New cash to add ($)</label><input id="rc" type="number" min="0" step="100" value="0" style="max-width:160px"><div class="scroll" style="margin-top:10px"><table id="rb"></table></div></section><section class="panel"><h2>Compare portfolios and stress tests</h2><div class="scroll"><table id="cmp"></table></div><p class="fine" id="cmpn"></p></section>
+<section class="panel notes"><h2>Things worth a look</h2><div id="ins"></div></section>
+<section class="panel" id="src"><details><summary>Sources and what’s verified</summary>
+<p class="fine" style="margin-top:0">Checked November 2026. Most are secondary sources (news and data sites), not the fund companies’ own pages, so confirm on the issuer’s fact sheet before acting.</p>
+<b>Expense ratios</b><ul>
+<li>VTI, VOO, BND at 0.03% and VXUS at 0.05%: <a href="https://wtop.com/news/2026/05/10-of-the-best-vanguard-etfs-to-buy-for-2026/" target="_blank" rel="noopener">U.S. News via WTOP, May 2026</a></li>
+<li>VEA 0.03%: <a href="https://www.nasdaq.com/articles/looking-international-diversification-heres-how-vanguards-vxus-and-vea-etfs-compare-2026" target="_blank" rel="noopener">Nasdaq/Motley Fool, Jul 2026</a>. VWO 0.06%, VXUS 0.05%: <a href="https://www.kavout.com/compare/vwo-vs-vxus" target="_blank" rel="noopener">Kavout, Oct 2026</a></li>
+<li>QQQ 0.18%, AGG 0.03%, GLD 0.40%: <a href="https://etf.pionline.com/etf-screener?ac=s" target="_blank" rel="noopener">Pensions &amp; Investments ETF screener</a>. VNQ 0.13%: <a href="https://www.unilink.us/blog/best-index-funds-2026" target="_blank" rel="noopener">Unilink</a> (secondary)</li>
+<li>XEQT 0.20%: <a href="https://www.blackrock.com/ca/individual/en/literature/fact-sheet/xeqt-ishares-core-equity-etf-portfolio-fund-fact-sheet-en-ca.pdf" target="_blank" rel="noopener">BlackRock Canada fact sheet, Apr 2026</a>. XIC 0.06%: <a href="https://etfportfolioblueprint.com/posts/breaking-up-with-xeqt-how-to-replace-the-ishares-core-equity-etf-portfolio" target="_blank" rel="noopener">ETF Portfolio Blueprint</a></li>
+<li>VGRO, XGRO, VBAL, XBAL, VCNS, XCNS: fees are approximate management expense ratios (about 0.20% to 0.25%); their expected return, volatility and yield are my blended estimates from the equity and bond assumptions, not provider figures. Check the fund pages for current numbers. Backtest history is not included for them yet.</li>
+<li>2026 contribution limits: TFSA $7,000 a year ($109,000 total since 2009), RRSP $33,810 (or 18% of last year’s earned income, whichever is lower), FHSA $8,000 a year and $40,000 for life: <a href="https://www.investmentexecutive.com/news/cra-announces-cpp-maximum-pensionable-earnings-for-2026/" target="_blank" rel="noopener">Investment Executive on CRA figures</a>. RESP: 20% grant on the first $2,500 a year, $7,200 per child: <a href="https://www.canada.ca/en/services/benefits/education/education-savings/savings-grant.html" target="_blank" rel="noopener">Government of Canada</a>; $50,000 lifetime contribution limit per child: <a href="https://www.wealthsimple.com/en-ca/learn/resp-faqs" target="_blank" rel="noopener">Wealthsimple</a>. These change yearly.</li>
+<li>TFSA, FHSA and RESP are not covered by the Canada–US treaty exemption on US dividends, only the RRSP is: <a href="https://help.wealthsimple.com/hc/en-ca/articles/360056584994-Non-resident-withholding-taxes-and-how-to-minimize-them" target="_blank" rel="noopener">Wealthsimple Help</a></li>
+<li>VFV 0.09% (Vanguard also lists 0.08%): <a href="https://etfmarket.cboe.com/canada/en/etf-comparison/VEQT-vs-VFV" target="_blank" rel="noopener">Cboe Canada</a>. VEQT 0.24% is the last audited MER I found (<a href="https://www.tradingview.com/symbols/TSX-VEQT/profile/" target="_blank" rel="noopener">TradingView</a>); <a href="https://www.fool.ca/2026/09/11/vfv-isnt-a-complete-portfolio-heres-what-canadian-investors-may-be-missing/" target="_blank" rel="noopener">Motley Fool Canada</a> reports Vanguard cut its management fee to 0.17% in late 2025, so VEQT may now cost less</li></ul>
+<b>Canadian tax rules</b><ul>
+<li>Capital gains inclusion stays at 50% (the proposed increase was cancelled in March 2025): <a href="https://www.fidelity.ca/en/insights/articles/understanding-capital-gains-tax" target="_blank" rel="noopener">Fidelity Canada</a></li>
+<li>15% US dividend withholding is lost in a TFSA; RRSPs are exempt for US-listed funds and US stocks, but not for Canadian-listed funds or REITs: <a href="https://wealthnorth.ca/investing/rrsp/us-dividend-withholding-tax-rrsp-canada/" target="_blank" rel="noopener">WealthNorth</a>, <a href="https://www.moneysense.ca/?p=279080" target="_blank" rel="noopener">MoneySense</a></li></ul>
+<b>Stress tests</b><ul>
+<li>S&amp;P 500 2008 (−37%): <a href="https://awealthofcommonsense.com/?p=53168" target="_blank" rel="noopener">A Wealth of Common Sense</a>. MSCI Emerging Markets 2008 (about −53%) and MSCI World (about −40%): <a href="https://www.researchaffiliates.com/en_us/publications/articles/f_2009_oct_rip_van_winkle.html" target="_blank" rel="noopener">Research Affiliates</a>, <a href="https://ftportfolios.com/Commentary/Insights/2009/1/5/week_of_january_5th.html" target="_blank" rel="noopener">First Trust</a></li>
+<li>2022 S&amp;P 500 (−18.1%), US bonds (−13.0%), REITs (about −24.5%): <a href="https://ameritas.com/OCM/GetFile?doc=379605" target="_blank" rel="noopener">Ameritas asset-class table</a></li></ul>
+<b>Not verified</b>
+<ul><li>XBB’s 0.10% expense ratio</li>
+<li>Stress figures for Canada, international, bonds outside the US, gold and the 2020 COVID window, and the 2008 REIT figure: from memory of published index returns</li>
+<li>Expected returns, volatilities and yields (my assumptions until you load Yahoo history), correlations, the 10% withholding I assume on non-US foreign dividends, and the single-stock stress scaling</li>
+<li>Proxy history (build_market_data.py): before they existed, IBIT borrows Bitcoin (BTC-USD) history, SGOV borrows BIL and BUG borrows CIBR; a proxy is similar but not identical (no fund fee, different holdings), so those months are approximate</li>
+<li>Lazy-portfolio presets: weights for Bogleheads Three Funds, Bogleheads Four Funds and Mebane Faber Ivy come from the lists on <a href="https://www.portfoliovisualizer.com/" target="_blank" rel="noopener">Portfolio Visualizer</a>; TIP and GSG fees and assumptions, and the Commodities stress figures (−46% in 2008, −35% in the 2020 window, +26% in 2022), are from memory</li>
+<li>Example portfolios: the bucket percentages are from your outline; I picked the specific funds and split buckets that named two funds (for example 20% VUG and 20% QQQ). Expense ratios for VUG, VBK, SOXX, BUG, IBIT, VYM and SGOV, their expected returns and volatilities, and the new Cash stress figures (+2% in 2008, 0% in the 2020 window, +1.5% in 2022) are from memory, not checked</li>
+<li>US accounts (401(k), Traditional IRA, Roth IRA): simplified treatment that I set from memory of the rules, with no US withholding on US or Canadian dividends and about 10% foreign tax lost on international and emerging dividends (no credit is available inside these accounts); no contribution limits, penalties or required distributions</li>
+<li>Crypto: the ten picks are the largest non-stablecoin coins in rankings from <a href="https://www.nasdaq.com/articles/10-biggest-cryptocurrencies-2026-bitcoin-ether-and-altcoins/" target="_blank" rel="noopener">Nasdaq</a> and <a href="https://www.ibtimes.com.au/top-10-cryptocurrencies-2026-market-leaders-emerging-contenders-1872590" target="_blank" rel="noopener">IBTimes</a>, and rankings shift often; expected return, volatility, the −45% (2020 window) and −64% (2022) crypto stress figures, and correlations are my estimates from memory; 2008 is set to 0% because Bitcoin did not exist yet</li>
+<li>Stock list membership for the S&amp;P 500, Nasdaq-100 and TSX: from memory, not checked against the index providers</li></ul></details>
+</section>
+</div>
+</div>
+</div>
+<script>(function(){var L={2009:5000,2010:5000,2011:5000,2012:5000,2013:5500,2014:5500,2015:10000,2016:5500,2017:5500,2018:5500,2019:6000,2020:6000,2021:6000,2022:6000,2023:6500,2024:7000,2025:7000,2026:7000};var g=function(i){return document.getElementById(i)};var fm=function(n){return(n<0?"-":"")+"$"+Math.abs(Math.round(n)).toLocaleString("en-CA")};var nv=function(i){return parseFloat(String(g(i).value).replace(/[^0-9.]/g,""))||0};var rw=function(a,b){return"<div style='display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line)'><span>"+a+"</span><b>"+b+"</b></div>"};
+function calc(){var birth=nv("tc-birth"),res=nv("tc-res"),con=nv("tc-con"),wd=nv("tc-wd"),w26=nv("tc-wd26");var st=Math.max(2009,birth+18,res||0),cum=0,y;for(y=st;y<=2026;y++)cum+=L[y];var room=cum-con+wd;g("tc-room").textContent=fm(Math.max(room,0));g("tc-sub").textContent=st>2026?"Not eligible to accrue room yet.":(room<0?"You may be over-contributed by "+fm(-room):"Eligible since "+st+" (2026 limit: $7,000)");g("tc-rows").innerHTML=rw("Total annual limits to date",fm(cum))+rw("Less: total contributions","-"+fm(con))+rw("Plus: withdrawals before 2026",fm(wd))+rw("Room available now",fm(room))+rw("Added back Jan 1, 2027",fm(w26));var w="";if(room<0){var ex=-room,tx=Math.max(0,ex-2000);w="Excess: "+fm(ex)+". "+(tx>0?"The CRA taxes the amount above the $2,000 buffer at 1% per month, about "+fm(tx*.01)+" a month. Withdraw the excess as soon as you can.":"This is within the $2,000 buffer, so no penalty tax applies, but avoid adding more.")}else if(room>0){var m=12-new Date().getMonth();w="To use it all by December: about "+fm(room/m)+" a month."}g("tc-warn").textContent=w}
+["tc-birth","tc-res","tc-con","tc-wd","tc-wd26"].forEach(function(i){g(i).addEventListener("input",function(){if(i.indexOf("tc-con")===0||i==="tc-wd"||i==="tc-wd26"){var d=String(g(i).value).replace(/[^0-9]/g,"");g(i).value=d?Number(d).toLocaleString("en-CA"):""}calc()})});calc()})();</script><footer class="foot"><hr><p style="margin:0 0 8px">Made in Canada, for Canadian investors who want a plain-English look at their options.</p><p style="margin:0 0 4px"><b style="color:var(--ink)">MapleFolio</b> provides educational estimates only. It is not financial, tax or investment advice.</p><p style="margin:0">Projections use editable long-run assumptions and past results do not predict future returns. Check current tax rules and your contribution room before acting.</p></footer>
+<script>
+const E={
+VTI:["Vanguard Total US Market","Equity","US",.03,7.5,15.5,1.4],
+VOO:["Vanguard S&P 500","Equity","US",.03,7.5,15,1.3],
+QQQ:["Invesco Nasdaq-100","Equity","US",.18,9,20,.6],
+VEA:["Vanguard Developed Markets","Equity","International",.03,6.5,16,3],
+VXUS:["Vanguard Total International","Equity","International",.05,6.5,16.5,3],
+VWO:["Vanguard Emerging Markets","Equity","Emerging",.06,7.5,20,3],
+XIC:["iShares Core S&P/TSX Capped","Equity","Canada",.06,7,15,2.8],
+VFV:["Vanguard S&P 500 (CAD)","Equity","US",.09,7.5,15,1.2],
+XEQT:["iShares Core Equity All-in-one","Equity","Global",.20,7,14,1.8],
+VEQT:["Vanguard All-Equity All-in-one","Equity","Global",.24,7,14.5,1.8],
+VGRO:["Vanguard Growth All-in-one (80/20)","Equity","Global",.24,6.3,11,2.1,0,0,.8],
+XGRO:["iShares Core Growth All-in-one (80/20)","Equity","Global",.20,6.3,11,2.1,0,0,.8],
+VBAL:["Vanguard Balanced All-in-one (60/40)","Equity","Global",.24,5.6,9,2.5,0,0,.6],
+XBAL:["iShares Core Balanced All-in-one (60/40)","Equity","Global",.20,5.6,9,2.5,0,0,.6],
+VCNS:["Vanguard Conservative All-in-one (40/60)","Equity","Global",.22,4.9,6.5,2.9,0,0,.4],
+XCNS:["iShares Core Conservative All-in-one (40/60)","Equity","Global",.20,4.9,6.5,2.9,0,0,.4],
+BND:["Vanguard Total US Bond","Bonds","US",.03,4,5.5,3.5],
+AGG:["iShares Core US Aggregate Bond","Bonds","US",.03,4,5.5,3.4],
+XBB:["iShares Core Canadian Bond","Bonds","Canada",.10,3.5,5.5,3.3],
+VNQ:["Vanguard Real Estate","Real estate","US",.13,6.5,19,3.8],
+GLD:["SPDR Gold Shares","Gold","Global",.40,4,15,0],
+"BTC-USD":["Bitcoin","Crypto","Global",0,10,55,0],
+"ETH-USD":["Ethereum","Crypto","Global",0,11,70,0],
+"XRP-USD":["XRP","Crypto","Global",0,10,85,0],
+"BNB-USD":["BNB","Crypto","Global",0,10,65,0],
+"SOL-USD":["Solana","Crypto","Global",0,12,85,0],
+"TRX-USD":["TRON","Crypto","Global",0,9,80,0],
+"DOGE-USD":["Dogecoin","Crypto","Global",0,9,95,0],
+"ADA-USD":["Cardano","Crypto","Global",0,9,85,0],
+"AVAX-USD":["Avalanche","Crypto","Global",0,10,90,0],
+"SUI20947-USD":["Sui","Crypto","Global",0,11,100,0],
+VUG:["Vanguard Growth","Equity","US",.04,9,19,.5],
+VBK:["Vanguard Small-Cap Growth","Equity","US",.07,8.5,22,.5],
+SOXX:["iShares Semiconductor","Equity","US",.34,10,30,.6],
+BUG:["Global X Cybersecurity","Equity","US",.51,9,23,.2],
+IBIT:["iShares Bitcoin Trust","Crypto","Global",.25,10,55,0],
+VYM:["Vanguard High Dividend Yield","Equity","US",.06,7,14,2.8],
+SGOV:["iShares 0-3 Month Treasury","Cash","US",.09,3.5,1,3.5],
+TIP:["iShares TIPS Bond","Bonds","US",.18,3.5,6,2.5],
+GSG:["iShares S&P GSCI Commodity","Commodities","Global",.75,3,20,0]};
+const SEC={T:["Technology",9,28,.6],C:["Communication",8,26,1],D:["Consumer discretionary",8.5,27,.8],S:["Consumer staples",6,17,2.6],N:["Energy",7,29,3.5],F:["Financials",8,24,2.2],H:["Health care",7.5,21,1.6],I:["Industrials",8,23,1.5],M:["Materials",7.5,26,2],R:["Real estate",7,24,3.8],U:["Utilities",6.5,19,3.3]};
+const LST=[["US",{
+T:"AAPL MSFT NVDA AVGO ORCL CRM AMD CSCO ADBE ACN IBM NOW INTU QCOM TXN AMAT PANW MU ADI LRCX KLAC ANET CRWD SNPS CDNS APH MSI ROP ADSK FTNT WDAY NXPI MCHP TEL FICO GLW HPQ HPE CTSH IT KEYS TYL PTC FSLR ON GDDY TER NTAP STX WDC SMCI JBL ZBRA TRMB AKAM FFIV EPAM GEN VRSN PLTR DELL SWKS QRVO MPWR ENPH DDOG APP CDW ASML ARM MRVL ZS TEAM SHOP",
+C:"GOOGL GOOG META NFLX DIS CMCSA T VZ TMUS CHTR EA TTWO WBD PSKY OMC LYV MTCH NWSA NWS FOX FOXA TKO",
+D:"AMZN TSLA HD MCD NKE LOW BKNG SBUX TJX ABNB CMG ORLY AZO MAR HLT GM F ROST DHI LEN NVR PHM YUM DRI RCL CCL NCLH LVS WYNN MGM EBAY ULTA BBY DECK LULU POOL TPR RL GRMN EXPE KMX APTV BWA HAS LKQ GPC CZR DPZ TSCO MHK DASH PDD MELI",
+S:"WMT COST PG KO PEP PM MO MDLZ CL TGT KMB GIS STZ SYY KDP HSY MNST KR ADM KHC CHD CLX MKC SJM HRL CAG CPB TSN LW BG EL KVUE DG DLTR TAP BF.B CCEP",
+N:"XOM CVX COP EOG SLB PSX MPC VLO OXY WMB KMI OKE HAL BKR DVN FANG TRGP CTRA EQT APA TPL EXE",
+F:"BRK.B JPM V MA BAC WFC GS MS C AXP SCHW BLK SPGI PGR CB MMC AON ICE CME USB PNC TFC COF MCO MET AIG PRU TRV ALL AFL AJG HIG FISV FIS PYPL MSCI NDAQ BK STT FITB HBAN RF KEY CFG MTB NTRS TROW BEN IVZ AMP RJF SYF CINF WRB L BRO ACGL EG GL PFG ERIE AIZ FDS CBOE MKTX COIN HOOD WTW",
+H:"LLY UNH JNJ ABBV MRK TMO ABT ISRG AMGN DHR PFE BSX SYK GILD VRTX MDT ELV REGN CI CVS BMY ZTS HCA MCK BDX EW IDXX IQV A MTD RMD HUM COR CAH DXCM GEHC BIIB MRNA WST STE WAT ZBH BAX HOLX ALGN LH DGX PODD MOH CNC UHS VTRS INCY TECH CRL RVTY COO TFX SOLV HSIC DVA AZN",
+I:"GE CAT RTX UNP HON UBER DE LMT BA ETN ADP UPS WM PH GD NOC TT MMM CTAS EMR ITW CSX NSC FDX JCI PCAR CARR GWW PWR URI FAST CMI ODFL OTIS RSG AME VRSK HWM LHX EFX IR XYL DOV WAB ROK FTV SWK AXON BR CPRT PAYX PAYC LDOS J JBHT CHRW EXPD DAL UAL LUV TXT HII SNA PNR AOS NDSN MAS ALLE GNRC IEX LII BLDR EME VLTO TDG HUBB ROL TRI FER TDY",
+M:"LIN SHW APD ECL FCX NEM CTVA DD DOW MLM VMC NUE STLD PPG LYB IFF ALB AMCR BALL AVY CF MOS PKG IP SW EMN",
+R:"PLD AMT EQIX WELL SPG PSA O DLR CCI VICI CBRE CSGP AVB EQR EXR IRM VTR SBAC WY INVH ARE MAA ESS UDR KIM REG HST CPT BXP DOC FRT",
+U:"NEE SO DUK CEG SRE AEP D EXC XEL PEG ED WEC EIX ETR DTE AEE PPL FE ES CMS CNP ATO NI LNT EVRG PNW AES NRG VST AWK"}],
+["CA",{
+T:"SHOP CSU GIB.A OTEX CLS",C:"T BCE RCI.B",D:"QSR MG GIL",S:"ATD L MRU WN DOL SAP",
+N:"ENB TRP CNQ SU CVE IMO PPL TOU WCP ARX",F:"RY TD BNS BMO CM NA MFC SLF GWO IFC BN BAM FFH POW",
+I:"CNR CP WCN TFII CAE WSP STN GFL",M:"B AEM NTR WPM FNV TECK.B K FM CCO AGI",U:"FTS EMA H AQN CU BEP.UN"}]];
+LST.forEach(([rg,o])=>Object.keys(o).forEach(k=>o[k].split(" ").forEach(t=>{const s=SEC[k],id=rg==="CA"?t+".TO":t;if(!E[id])E[id]=[s[0]+" stock","Equity",rg==="CA"?"Canada":"US",0,s[1],s[2],s[3],1,k]})));
+const CL=["Equity","Bonds","Real estate","Gold","Crypto","Cash","Commodities"],RG=["US","Canada","International","Emerging","Global"];
+const COL=["var(--c1)","var(--c2)","var(--c3)","var(--c4)","var(--c5)","var(--c6)","var(--mute)"];
+const TPL={"80/20 US + bonds":[["VTI",64],["VXUS",16],["BND",20]],"All-in-one equity":[["XEQT",100]],"Growth all-in-one":[["VGRO",100]],"Balanced all-in-one":[["VBAL",100]],"Canadian core":[["XIC",30],["VFV",30],["VEA",20],["XBB",20]],"Growth tilt":[["VOO",50],["QQQ",25],["VWO",10],["BND",15]],"Diversified with gold":[["VTI",40],["VXUS",20],["BND",25],["VNQ",5],["GLD",10]],"Bogleheads three funds":[["VTI",50],["VXUS",30],["BND",20]],"Bogleheads four funds":[["VTI",50],["VXUS",30],["BND",10],["TIP",10]],"Mebane Faber Ivy":[["VTI",20],["VXUS",20],["BND",20],["VNQ",20],["GSG",20]]};
+const mk=k=>TPL[k].map(a=>({t:a[0],w:a[1]}));
+const PF=[mk("80/20 US + bonds"),mk("All-in-one equity"),mk("Growth tilt")];let cur=0,H=PF[0];
+const ST={"2008 (calendar year)":{Equity:{US:-37,Canada:-33,International:-43,Emerging:-53,Global:-40},Bonds:{US:5,Canada:6},"Real estate":-38,Gold:6,Crypto:0,Cash:2,Commodities:-46},"2020 COVID crash (Feb 19–Mar 23)":{Equity:{US:-34,Canada:-37,International:-34,Emerging:-32,Global:-34},Bonds:{US:-3,Canada:-3},"Real estate":-42,Gold:-5,Crypto:-45,Cash:0,Commodities:-35},"2022 (calendar year)":{Equity:{US:-18,Canada:-6,International:-14,Emerging:-20,Global:-18},Bonds:{US:-13,Canada:-12},"Real estate":-25,Gold:0,Crypto:-64,Cash:1.5,Commodities:26}};
+function shock(e,s){const m=ST[s];let v;if(e[9]!=null)return e[9]*m.Equity.Global+(1-e[9])*(m.Bonds.Canada??m.Bonds.US);if(e[1]==="Equity")v=m.Equity[e[2]];else if(e[1]==="Bonds")v=m.Bonds[e[2]]??m.Bonds.US;else v=m[e[1]];if(e[1]==="Crypto"&&v<0)v=Math.max(-95,v*e[5]/60);if(e[7])v*=Math.min(1.8,Math.max(.7,e[5]/16));return v}
+function withH(h,f){const s=H;H=h;try{return f()}finally{H=s}}
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat("en-CA",{style:"currency",currency:"CAD",maximumFractionDigits:0}).format(n);
+const short=n=>n>=1e6?"$"+(n/1e6).toFixed(1)+"M":n>=1e3?"$"+Math.round(n/1e3)+"k":"$"+Math.round(n);
+const pc=(n,d=1)=>n.toFixed(d)+"%";
+function corr(a,b){if(a===b)return 1;const q=rc(a,b);if(q!=null)return q;const x=E[a],y=E[b];
+if(x[1]==="Crypto"||y[1]==="Crypto"){if(x[1]===y[1])return .75;const o=x[1]==="Crypto"?y:x;return o[1]==="Equity"?.3:.1}
+if(x[7]||y[7]){if(x[7]&&y[7])return x[8]===y[8]?.55:x[2]===y[2]?.4:.3;const s=x[7]?x:y,o=x[7]?y:x;if(o[1]==="Equity")return(o[2]===s[2]||o[2]==="Global")?.75:.6;return o[1]==="Bonds"?.1:o[1]==="Real estate"?.4:.05}
+if(x[1]===y[1]&&x[2]===y[2])return .95;
+if(x[1]==="Gold"||y[1]==="Gold")return .1;
+if(x[1]==="Equity"&&y[1]==="Equity")return .8;
+if(x[1]==="Bonds"&&y[1]==="Bonds")return .8;
+if(x[1]==="Real estate"||y[1]==="Real estate")return(x[1]==="Bonds"||y[1]==="Bonds")?.3:.7;
+return .15}
+function calc(){
+const tot=H.reduce((s,h)=>s+h.w,0)||1;
+const w=H.map(h=>h.w/tot);
+let er=0,ret=0,y=0,v2=0;
+H.forEach((h,i)=>{const e=E[h.t];er+=w[i]*e[3];ret+=w[i]*(e[4]-e[3]);y+=w[i]*e[6]});
+H.forEach((a,i)=>H.forEach((b,j)=>{v2+=w[i]*w[j]*E[a.t][5]*E[b.t][5]*corr(a.t,b.t)}));
+return{tot,w,er,ret,y,vol:Math.sqrt(Math.max(0,v2))}}
+function fv(V,C,r,t){return V*Math.pow(1+r,t)+(Math.abs(r)<1e-9?C*t:C*(Math.pow(1+r,t)-1)/r)}
+function path(V,C,mu,sg,z,Y){const m=Math.log(1+mu)-.5*sg*sg;const o=[];
+for(let t=0;t<=Y;t++){const r=t===0?0:Math.exp(m+z*sg/Math.sqrt(t))-1;o.push(fv(V,C,r,t))}return o}
+function renderHolds(){
+$("holds").innerHTML=H.map((h,i)=>`<div class="hold"><input list="tk" data-i="${i}" class="sel" value="${h.t}" aria-label="Ticker" autocomplete="off"><input type="number" min="0" max="100" step="1" value="${h.w}" data-i="${i}" class="wt" aria-label="Weight %"><button class="x" data-i="${i}" aria-label="Remove holding">×</button></div>`).join("");
+document.querySelectorAll(".sel").forEach(e=>{e.onfocus=()=>e.select();e.onchange=()=>{const k=ensure(e.value);if(k)H[e.dataset.i].t=k;e.value=H[e.dataset.i].t;update()}});
+document.querySelectorAll(".wt").forEach(e=>e.oninput=()=>{H[e.dataset.i].w=Math.max(0,+e.value||0);update(true)});
+document.querySelectorAll(".x").forEach(e=>e.onclick=()=>{H.splice(e.dataset.i,1);if(!H.length)H.push({t:"VTI",w:100});renderHolds();update()})}
+function bars(id,keys,map){const t=Object.values(map).reduce((a,b)=>a+b,0)||1;
+$(id).innerHTML=keys.filter(k=>map[k]>0).map((k,i)=>`<div class="bar"><span>${k}</span><div class="track"><div class="fill" style="width:${map[k]/t*100}%;background:${COL[keys.indexOf(k)]}"></div></div><span class="n">${pc(map[k]/t*100,0)}</span></div>`).join("")}
+function update(keep){
+const V=+$("val").value||0,C=+$("con").value||0,Y=Math.min(50,Math.max(1,Math.round(+$("yrs").value||1)));
+const c=calc();
+const sum=H.reduce((s,h)=>s+h.w,0);
+$("tot").className="tot"+(Math.abs(sum-100)>.01?" bad":"");
+$("tot").innerHTML=`Weights total <b>${sum}%</b>${Math.abs(sum-100)>.01?" — results scale your weights to 100%":""}`;
+$("yl").textContent=Y;
+$("stats").innerHTML=[[pc(c.ret*1,1),"Expected return after fees"],[pc(c.vol,1),"Typical yearly swing (volatility)"],[pc(c.er,2),"Blended expense ratio"],[money(V*c.er/100),"Fees in year one"],[money(V*c.y/100),"Dividend and interest income, year one"]].map(a=>`<div class="stat"><div class="v">${a[0]}</div><div class="k">${a[1]}</div></div>`).join("");
+const mu=c.ret/100,sg=c.vol/100;
+const dz=a=>a.map((v,t)=>v*df(t)),med=dz(path(V,C*12,mu,sg,0,Y)),lo=dz(path(V,C*12,mu,sg,-1.2816,Y)),hi=dz(path(V,C*12,mu,sg,1.2816,Y)),nof=dz(path(V,C*12,mu+c.er/100,sg,0,Y));
+const inp=dz(Array.from({length:Y+1},(_,t)=>V+C*12*t));const W=640,Hh=320,L=62,R=92,T=14,B=44,mx=Math.max(...hi,...nof)*1.05||1;
+const X=t=>L+t/Y*(W-L-R),Yp=v=>T+(1-v/mx)*(Hh-T-B);
+const line=a=>a.map((v,t)=>(t?"L":"M")+X(t).toFixed(1)+" "+Yp(v).toFixed(1)).join("");
+let g="";for(let i=0;i<=4;i++){const v=mx*i/4;g+=`<line x1="${L}" x2="${W-R}" y1="${Yp(v)}" y2="${Yp(v)}" stroke="var(--line)"/><text x="${L-6}" y="${Yp(v)+4}" text-anchor="end">${short(v)}</text>`}
+const step=Y>25?10:Y>10?5:Y>5?2:1;for(let t=0;t<=Y;t+=step)g+=`<text x="${X(t)}" y="${Hh-24}" text-anchor="middle">${t}</text>`;g+=`<text x="${(L+W-R)/2}" y="${Hh-5}" text-anchor="middle" style="font-size:13px">Years from now</text>`;
+const area=line(hi)+"L"+lo.map((v,t)=>[X(Y-t).toFixed(1),Yp(lo[Y-t]).toFixed(1)]).map(p=>p.join(" ")).join("L")+"Z";
+const ends=[[hi[Y],"High case","var(--ink)"],[med[Y],"Typical","var(--acc)"],[lo[Y],"Low case","var(--ink)"],[inp[Y],"You put in","var(--mute)"]].map(e=>({v:e[0],t:e[1],c:e[2],y:Yp(e[0])})).sort((a,b)=>a.y-b.y);for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<32)ends[i].y=ends[i-1].y+32;
+const el=ends.map(e=>`<text x="${W-R+8}" y="${e.y+4}" style="fill:${e.c};font-weight:600">${short(e.v)}</text><text x="${W-R+8}" y="${e.y+18}" style="font-size:12px">${e.t}</text>`).join("");
+$("fan").innerHTML=g+`<path d="${area}" fill="var(--acc)" opacity=".22"/><path d="${line(inp)}" fill="none" stroke="var(--mute)" stroke-width="2" stroke-dasharray="2 4"/><path d="${line(nof)}" fill="none" stroke="var(--acc2)" stroke-width="2" stroke-dasharray="6 4"/><path d="${line(med)}" fill="none" stroke="var(--acc)" stroke-width="3.5"/><circle cx="${X(Y)}" cy="${Yp(med[Y])}" r="5" fill="var(--acc)"/>${el}<line id="cx" y1="${T}" y2="${Hh-B}" x1="0" x2="0" stroke="var(--ink)" stroke-width="1" visibility="hidden"/>`;
+$("fan").onpointermove=ev=>{const r=$("fan").getBoundingClientRect(),t=Math.max(0,Math.min(Y,Math.round(((ev.clientX-r.left)/r.width*W-L)/(W-L-R)*Y))),c=$("cx");c.setAttribute("x1",X(t));c.setAttribute("x2",X(t));c.setAttribute("visibility","visible");$("fr").innerHTML="<b>Year "+t+":</b> typical "+money(med[t])+", likely range "+money(lo[t])+" to "+money(hi[t])+". You’ve put in "+money(inp[t])+"."};
+$("rl").textContent=$("real").checked?" (today’s dollars)":"";const put=V+Array.from({length:Y},(_,i)=>C*12*df(i+1)).reduce((a,b)=>a+b,0);
+$("fee").innerHTML=`<p>You would put in about <b>${money(put)}</b>. The median outcome is <b>${money(med[Y])}</b>, with a middle range of <b>${money(lo[Y])}</b> to <b>${money(hi[Y])}</b>.</p><p class="${nof[Y]-med[Y]>put*.03?"w":""}">Over ${Y} years, fees cost roughly <b>${money(nof[Y]-med[Y])}</b> of the median result (${pc((nof[Y]-med[Y])/nof[Y]*100,1)}).</p>`;
+const cls={},reg={};H.forEach((h,i)=>{{const q=E[h.t][9];if(q!=null){cls.Equity=(cls.Equity||0)+c.w[i]*q;cls.Bonds=(cls.Bonds||0)+c.w[i]*(1-q)}else cls[E[h.t][1]]=(cls[E[h.t][1]]||0)+c.w[i]}reg[E[h.t][2]]=(reg[E[h.t][2]]||0)+c.w[i]});
+bars("b1",CL,cls);bars("b2",RG,reg);
+const I=[],has=k=>H.some(h=>h.t===k);
+const top=Math.max(...c.w);
+if(top>.5&&H.length>1)I.push(["w",`One fund is ${pc(top*100,0)} of the portfolio. Check that this is intentional.`]);
+H.forEach((h,i)=>{if(E[h.t][7]&&c.w[i]>.15)I.push(["w",h.t+" is a single stock at "+pc(c.w[i]*100,0)+" of the portfolio. That adds company-specific risk an index fund spreads away."])});
+if(has("VTI")&&has("VOO")||has("VFV")&&(has("VOO")||has("VTI")))I.push(["w","These funds track nearly the same large US companies, so holding both adds little diversification."]);
+const aio=H.filter(h=>["XEQT","VEQT","VGRO","XGRO","VBAL","XBAL","VCNS","XCNS"].includes(h.t));
+if(aio.length&&H.length>1)I.push(["w","An all-in-one fund already spans global stocks and bonds. Adding other funds on top changes its balance rather than diversifying it."]);
+if(aio.length>1)I.push(["w",aio.map(h=>h.t).join(" and ")+" are all-in-one funds that already hold similar global mixes."]);
+const cadL=new Set(["XIC","VFV","XEQT","VEQT","XBB","VGRO","XGRO","VBAL","XBAL","VCNS","XCNS"]),usdW=H.reduce((q,h,i)=>q+(/\.(TO|V)$/.test(h.t)||cadL.has(h.t)?0:c.w[i]),0);
+if(usdW>.25)I.push(["",`About ${pc(usdW*100,0)} of this mix is US-listed and priced in US dollars. Its value in Canadian dollars also moves with the exchange rate, which this estimate does not model, and converting CAD to USD costs money (often 1% to 2% each way at brokers unless you use a USD account or Norbert’s gambit). Canadian-listed versions such as VFV or XEQT avoid the conversion.`]);
+if((cls.Equity||0)>.9)I.push(["","Over 90% stocks. Expect large drops in bad years; this portfolio’s typical yearly swing is about "+pc(c.vol,0)+"."]);
+if(!(cls.Bonds>0))I.push(["","There are no bonds in this mix, so nothing here cushions a stock-market decline."]);
+if((reg.US||0)>.7)I.push(["","More than 70% sits in US assets, so results depend heavily on one market."]);
+if(!(reg.International>0||reg.Emerging>0||reg.Global>0))I.push(["","No exposure outside North America."]);
+if(c.er>.25)I.push(["w","The blended expense ratio is above 0.25%. Broad index funds often cost less than that."]);
+const cw=H.reduce((s,h,i)=>s+(E[h.t][1]==="Crypto"?c.w[i]:0),0);if(cw>0)I.push([cw>.1?"w":"","Crypto is far more volatile than stocks and has fallen 60% or more in a bad year. Coins held directly generally can’t go in a TFSA or RRSP (only crypto ETFs can), and this model taxes them like a stock that pays no yield."]);
+if(!I.length)I.push(["","No obvious flags: the mix is spread across assets and keeps fees low."]);
+$("ins").innerHTML=I.map(a=>`<p class="${a[0]}">${a[1]}</p>`).join("");
+compare();bt();const r2=v=>+(+v).toFixed(2),so=(a,v)=>a.map(x=>`<option${x===v?" selected":""}>${x}</option>`).join(""),ni=(k,f,v,s)=>`<input type="number" data-k="${k}" data-f="${f}" value="${r2(v)}" step="${s}" style="width:68px;padding:4px 5px" aria-label="${["","","","Fee","Return","Volatility","Yield"][f]} for ${k}">`;
+$("assume").innerHTML="<tr><th>Holding</th><th>Weight</th><th>Type</th><th>Class</th><th>Region</th><th>Fee %</th><th>Return %</th><th>Vol %</th><th>Yield %</th></tr>"+H.map((h,i)=>{const k=h.t,e=E[k],sel=(f,o,v)=>`<select data-k="${k}" data-f="${f}" style="width:auto;padding:4px 5px" aria-label="${f===1?"Class":"Region"} for ${k}">${so(o,v)}</select>`;return`<tr><td>${k}</td><td>${pc(c.w[i]*100,0)}</td><td><select data-k="${k}" data-f="7" style="width:auto;padding:4px 5px" aria-label="Type for ${k}"><option value="0"${e[7]?"":" selected"}>ETF</option><option value="1"${e[7]?" selected":""}>Stock</option></select></td><td>${sel(1,CL,e[1])}</td><td>${sel(2,RG,e[2])}</td><td>${ni(k,3,e[3],.01)}</td><td>${ni(k,4,e[4],.5)}</td><td>${ni(k,5,e[5],.5)}</td><td>${ni(k,6,e[6],.1)}</td></tr>`}).join("");editRow();rebal();save()}
+function ensure(raw){let v=raw.trim().toUpperCase().replace(/\s+/g,"");v=AL[v]||v;if(E[v])return v;if(E[v+".TO"])return v+".TO";if(!/^[A-Z0-9.\-^=]{1,12}$/.test(v))return null;E[v]=[v+" (custom)","Equity",/\.(TO|V)$/.test(v)?"Canada":"US",0,7.5,20,1.5,1,"X"];BASE[v]=E[v].slice();USER[v]=1;const o=document.createElement("option");o.value=v;$("tk").appendChild(o);return v}
+function save(){try{localStorage.setItem("pa-st",JSON.stringify(stateObj()))}catch(e){}}
+function editRow(){document.querySelectorAll("#assume [data-k]").forEach(el=>el.onchange=()=>{const k=el.dataset.k,f=+el.dataset.f,e=E[k];if(f===7){e[7]=+el.value;if(e[7]&&!e[8])e[8]="X"}else if(f<3)e[f]=el.value;else{const n=parseFloat(el.value);if(!isFinite(n))return;e[f]=f===5?Math.max(1,n):f===4?n:Math.max(0,n)}BASE[k]=e.slice();USER[k]=1;update()})}
+const addT=()=>{const k=ensure($("nt").value),m=$("addmsg");if(!k){m.textContent="Enter a ticker such as AAPL, RY or XEQT.";return}H.push({t:k,w:0});$("nt").value="";m.textContent=E[k][0].endsWith("(custom)")?k+" isn’t in the built-in list, so it starts with placeholder assumptions (US stock, 7.5% return, 20% volatility). Edit them in Assumptions below.":(NM[k]||k)+" added at 0%. Set its weight in the list, then use “Make weights total 100%”.";renderHolds();update()};
+$("add").onclick=addT;$("nt").onkeydown=e=>{if(e.key==="Enter")addT()};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+function df(t){return $("real").checked?Math.pow(1+(+$("inf").value||0)/100,-t):1}
+function stateObj(){return{PF,U:Object.keys(USER).map(k=>[k,E[k]]),V:["val","con","yrs","acct","tr","inf"].map(id=>$(id).value),N:NAMES}}
+const CUR={};
+function rebal(){const c=calc(),cash=Math.max(0,+$("rc").value||0),own=H.reduce((s,h)=>s+(CUR[h.t]||0),0),T=own+cash,sh=H.map((h,i)=>Math.max(0,c.w[i]*T-(CUR[h.t]||0))),ss=sh.reduce((a,b)=>a+b,0);
+$("rb").innerHTML="<tr><th>Holding</th><th>Owned now ($)</th><th>Target</th><th>Buy / sell</th><th>New cash only</th></tr>"+H.map((h,i)=>{const d=c.w[i]*T-(CUR[h.t]||0);return`<tr><td>${h.t}</td><td><input type="number" min="0" step="100" data-r="${h.t}" value="${CUR[h.t]||0}" style="width:92px;padding:4px 5px" aria-label="Amount owned in ${h.t}"></td><td>${pc(c.w[i]*100,0)}</td><td style="color:var(--${d<0?"acc2":"acc"})">${d<0?"Sell ":"Buy "}${money(Math.abs(d))}</td><td>${money(ss>0?cash*sh[i]/ss:cash*c.w[i])}</td></tr>`}).join("");
+document.querySelectorAll("#rb [data-r]").forEach(e=>e.onchange=()=>{CUR[e.dataset.r]=Math.max(0,+e.value||0);update()})}
+const dl=(name,type,text)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove()};
+$("csv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"',r=[["Portfolio","Ticker","Weight %","Fee %","Return %","Volatility %","Yield %"]];PF.forEach((h,k)=>h.forEach(x=>{const e=E[x.t];r.push([NAMES[k]||"Portfolio "+"ABC"[k],x.t,x.w,e[3],e[4],e[5],e[6]])}));dl("portfolios.csv","text/csv",r.map(l=>l.map(q).join(",")).join("\n"))};
+$("shr").onclick=async()=>{const u=location.href.split("#")[0]+"#s="+btoa(unescape(encodeURIComponent(JSON.stringify(stateObj())))),m=$("addmsg");try{await navigator.clipboard.writeText(u);m.textContent="Link copied. Anyone who opens it sees your portfolios and settings."}catch(e){m.textContent="Couldn’t copy automatically. Copy this link: "+u}};
+$("rst").onclick=function(){if(this.dataset.c){try{localStorage.removeItem("pa-st")}catch(e){}location.hash="";location.reload()}else{this.dataset.c=1;this.textContent="Click again to erase saved portfolios";setTimeout(()=>{delete this.dataset.c;this.textContent="Reset everything"},4000)}};
+$("pn").oninput=()=>{NAMES[cur]=$("pn").value.slice(0,24);renderTabs();update()};
+$("norm").onclick=()=>{const t=H.reduce((s,h)=>s+h.w,0);if(t>0){H.forEach(h=>h.w=Math.round(h.w/t*1000)/10);const d=100-H.reduce((s,h)=>s+h.w,0);H[0].w=Math.round((H[0].w+d)*10)/10}renderHolds();update()};
+const EX=[{n:"1. High-growth portfolio",b:"Long time horizons (7+ years) and investors comfortable with large short-term swings in pursuit of maximum long-term growth.",a:[["U.S. large-cap growth equities","VUG 20%, QQQ 20%",40],["International and emerging-market equities","VWO",20],["Small and mid-cap growth equities","VBK",15],["Sector and innovation thematic ETFs","SOXX 8%, BUG 7%",15],["Alternatives, crypto and cash","IBIT 5%, SGOV 5%",10]],h:[["VUG",20],["QQQ",20],["VWO",20],["VBK",15],["SOXX",8],["BUG",7],["IBIT",5],["SGOV",5]]},{n:"2. Moderate (balanced) portfolio",b:"Medium-to-long horizons (5 to 7+ years). Balances growth and income, aiming to soften market downturns while still outpacing inflation.",a:[["Broad-market equities","VTI",50],["International developed markets","VXUS",15],["Investment-grade bonds","BND",25],["REITs and commodities","VNQ 5%, GLD 5%",10]],h:[["VTI",50],["VXUS",15],["BND",25],["VNQ",5],["GLD",5]]},{n:"3. Conservative (safe) portfolio",b:"Short horizons (under 3 to 5 years), capital preservation, or anyone who puts limiting losses ahead of aggressive growth.",a:[["Broad-market dividend equities","VYM",20],["U.S. aggregate investment-grade bonds","BND",50],["Short-term T-bills and cash equivalents","SGOV",20],["Gold and defensive commodities","GLD",10]],h:[["VYM",20],["BND",50],["SGOV",20],["GLD",10]]}];
+$("ex").innerHTML=EX.map((x,i)=>`<div style="border-top:1px solid var(--line);padding:12px 0"><b>${x.n}</b><p class="fine" style="margin:4px 0 8px"><b>Best for:</b> ${x.b}</p><div class="scroll"><table><tr><th>Bucket</th><th>Example funds</th><th>Target</th></tr>${x.a.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}%</td></tr>`).join("")}</table></div><div class="btns" style="margin-top:8px"><button class="btn" data-x="${i}">Load into the selected portfolio</button></div></div>`).join("");
+document.querySelectorAll("#ex [data-x]").forEach(b=>b.onclick=()=>{H=PF[cur]=EX[+b.dataset.x].h.map(a=>({t:a[0],w:a[1]}));renderHolds();update()});
+$("tpl").innerHTML=Object.keys(TPL).map(k=>`<button class="btn" data-k="${k}">${k}</button>`).join("");
+document.querySelectorAll("#tpl .btn").forEach(b=>b.onclick=()=>{H=PF[cur]=TPL[b.dataset.k].map(a=>({t:a[0],w:a[1]}));renderHolds();update()});
+const NM={GOOGL:"Alphabet (Google) class A",GOOG:"Alphabet (Google) class C",NVDA:"Nvidia",AAPL:"Apple",MSFT:"Microsoft",AMZN:"Amazon",META:"Meta Platforms",TSLA:"Tesla",NFLX:"Netflix",AVGO:"Broadcom",AMD:"AMD","BRK.B":"Berkshire Hathaway B",JPM:"JPMorgan Chase",V:"Visa",LLY:"Eli Lilly",WMT:"Walmart",COST:"Costco",DIS:"Disney",PLTR:"Palantir","SHOP.TO":"Shopify (TSX)","RY.TO":"Royal Bank (TSX)","TD.TO":"TD Bank (TSX)","ENB.TO":"Enbridge (TSX)","BTC-USD":"Bitcoin","ETH-USD":"Ethereum","XRP-USD":"XRP","BNB-USD":"BNB","SOL-USD":"Solana","TRX-USD":"TRON","DOGE-USD":"Dogecoin","ADA-USD":"Cardano","AVAX-USD":"Avalanche","SUI20947-USD":"Sui"};
+const AL={NVDIA:"NVDA",NVIDIA:"NVDA",GOOGLE:"GOOGL",ALPHABET:"GOOGL",FACEBOOK:"META",APPLE:"AAPL",MICROSOFT:"MSFT",AMAZON:"AMZN",TESLA:"TSLA",NETFLIX:"NFLX",BROADCOM:"AVGO",BERKSHIRE:"BRK.B","BRK-B":"BRK.B",SHOPIFY:"SHOP.TO",WALMART:"WMT",COSTCO:"COST",DISNEY:"DIS",PALANTIR:"PLTR",BTC:"BTC-USD",BITCOIN:"BTC-USD",ETH:"ETH-USD",ETHEREUM:"ETH-USD",XRP:"XRP-USD",RIPPLE:"XRP-USD",BNB:"BNB-USD",SOL:"SOL-USD",SOLANA:"SOL-USD",TRX:"TRX-USD",TRON:"TRX-USD",DOGE:"DOGE-USD",DOGECOIN:"DOGE-USD",ADA:"ADA-USD",CARDANO:"ADA-USD",AVAX:"AVAX-USD",AVALANCHE:"AVAX-USD",SUI:"SUI20947-USD"};
+$("tk").innerHTML=Object.keys(E).map(k=>`<option value="${k}">${esc(NM[k]||E[k][0])}</option>`).join("");
+const BASE={};Object.keys(E).forEach(k=>BASE[k]=E[k].slice());const USER={};const NAMES=["Portfolio A","Portfolio B","Portfolio C"];
+function loadS(S){if(S){(S.U||[]).forEach(([k,v])=>{if(/^[A-Z0-9.\-^=]{1,12}$/.test(k)&&Array.isArray(v)&&v.length>=7&&v.slice(3,7).every(isFinite)){const had=!!E[k],cl=CL.includes(v[1])?v[1]:"Equity",rg=RG.includes(v[2])?v[2]:"US",nn=v.slice(3,7).map(Number),nmx=String(v[0]).replace(/[^\w .,&()\/+'’-]/g,"").slice(0,60)||k;if(nn[0]<0||nn[0]>10||nn[1]<-50||nn[1]>100||nn[2]<0||nn[2]>300||nn[3]<0||nn[3]>100)return;const ww=[nmx,cl,rg,nn[0],nn[1],nn[2],nn[3],v[7]?1:0,v[8]?"X":0];E[k]=ww;BASE[k]=ww.slice();USER[k]=1;if(!had){const o=document.createElement("option");o.value=k;$("tk").appendChild(o)}}});(S.PF||[]).forEach((p,i)=>{if(PF[i]&&Array.isArray(p)){const q=p.filter(x=>x&&E[x.t]&&isFinite(x.w));if(q.length)PF[i].splice(0,PF[i].length,...q.map(x=>({t:x.t,w:+x.w})))}});if(S.V)["val","con","yrs","acct","tr","inf"].forEach((id,i)=>{if(S.V[i]!=null)$(id).value=S.V[i]});if(S.N)NAMES.splice(0,3,...S.N.slice(0,3).map(x=>String(x).slice(0,24)))}}
+try{loadS(JSON.parse(localStorage.getItem("pa-st")||"null"))}catch(e){}
+try{if(location.hash.startsWith("#s="))loadS(JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(3))))))}catch(e){}
+let MD=null;
+var RC=null;
+function rc(a,b){if(!MD||!MD.months)return null;const x=MD.data[a],y=MD.data[b];if(!x||!y||!x.r||!y.r)return null;const c=RC||(RC={}),k=a<b?a+'|'+b:b+'|'+a;if(k in c)return c[k];const lo=Math.max(x.s,y.s),hi=Math.min(x.s+x.r.length,y.s+y.r.length),n=hi-lo;let v=null;if(n>=24){let sa=0,sb=0,saa=0,sbb=0,sab=0;for(let i=lo;i<hi;i++){const p=x.r[i-x.s],q=y.r[i-y.s];sa+=p;sb+=q;saa+=p*p;sbb+=q*q;sab+=p*q}const cv=sab/n-sa*sb/n/n,va=saa/n-sa*sa/n/n,vb=sbb/n-sb*sb/n/n;if(va>0&&vb>0)v=Math.max(-1,Math.min(1,cv/Math.sqrt(va*vb)))}return c[k]=v}
+function btWin(h){const t=h.reduce((s,x)=>s+x.w,0)||1,A=h.filter(x=>x.w>0).map(x=>({d:MD.data[x.t],w:x.w/t,t:x.t})),bad=A.filter(a=>!a.d||!a.d.r).map(a=>a.t);return bad.length?{bad,A}:{A,lo:Math.max(...A.map(a=>a.d.s)),hi:Math.min(...A.map(a=>a.d.s+a.d.r.length))}}
+function btRun(A,lo,hi,m,st,c){let v=A.map(a=>a.w*st),val=[st],ix=[1],ret=[],nr=0;for(let i=0;i<hi-lo;i++){const b=v.reduce((x,y)=>x+y,0),nv=v.map((q,j)=>q*(1+A[j].d.r[lo+i-A[j].d.s]/100)),g=nv.reduce((x,y)=>x+y,0),s=g+c,dv=nv.map((q,j)=>q+c*A[j].w);ret.push(b>0?g/b-1:0);ix.push(ix[i]*(1+ret[i]));val.push(s);const off=dv.some((q,j)=>{const d=Math.abs(q/s-A[j].w);return d>.05||d>.25*A[j].w}),go=m==='m'||(m==='q'&&(i+1)%3===0)||(m==='y'&&(i+1)%12===0)||(m==='b'&&off);if(go){nr++;v=A.map(a=>a.w*s)}else v=dv}
+const n=ret.length,mean=ret.reduce((x,y)=>x+y,0)/n,sd=Math.sqrt(ret.reduce((x,y)=>x+(y-mean)**2,0)/(n-1)),lb=i=>MD.months[lo+Math.max(0,i-1)];let pk=0,dd=0,pi=0,ti=0;ix.forEach((x,i)=>{if(x>ix[pk])pk=i;const d=x/ix[pk]-1;if(d<dd){dd=d;pi=pk;ti=i}});
+const yr={};ret.forEach((r,i)=>{const y=MD.months[lo+i].slice(0,4);(yr[y]=yr[y]||[]).push(r)});const ys=Object.keys(yr).filter(y=>yr[y].length===12).map(y=>[y,yr[y].reduce((x,r)=>x*(1+r),1)-1]).sort((a,b)=>a[1]-b[1]);
+return{val,n,cagr:Math.pow(ix[n],12/n)-1,vol:sd*Math.sqrt(12),dd,pi:lb(pi),ti:lb(ti),worst:ys[0],best:ys[ys.length-1],nr,put:st+c*n}}
+function hm(){const hs=H.filter(x=>x.w>0).map(x=>x.t).filter((t,i,a)=>a.indexOf(t)===i).slice(0,12);let n=0,k=0;$('hm').innerHTML=`<tr><th></th>${hs.map(t=>`<th>${t}</th>`).join('')}</tr>`+hs.map(a=>`<tr><td style='text-align:left'>${a}</td>${hs.map(b=>{const c=corr(a,b);if(a!==b){k++;if(rc(a,b)!=null)n++}return`<td style='background:${c>=0?'hsla(210,65%,50%,':'hsla(10,75%,50%,'}${(Math.abs(c)*.6).toFixed(2)})'>${c.toFixed(2)}</td>`}).join('')}</tr>`).join('');$('hmn').textContent=!k?'':n===k?'All pairs use real monthly history from your data file.':n?`${n} of ${k} pairs use real monthly history; the rest are my rough estimates.`:'These are my rough estimates. Load an updated market-data.json to use real correlations.'}
+function bt(){hm();const el=$('bt');if(!MD||!MD.months){el.innerHTML=`<p class='fine'>Load a market-data.json built with the updated build_market_data.py to run the backtest. It now saves monthly returns, which older files did not.</p>`;return}
+const W=PF.map(btWin);if(W.some(w=>!w.A.length)){el.innerHTML=`<p class='fine'>Give every portfolio at least one holding with a weight above zero.</p>`;return}
+const miss=[...new Set(W.flatMap(w=>w.bad||[]))];if(miss.length){el.innerHTML=`<p class='fine'>No monthly history loaded for ${miss.join(', ')}. Add them to tickers.txt and rebuild the data file, or remove them from the portfolios.</p>`;return}
+const bw=btWin([{t:'VTI',w:100}]),ok=bw.lo!=null,lo=Math.max(...W.map(w=>w.lo),ok?bw.lo:0),hi=Math.min(...W.map(w=>w.hi),ok?bw.hi:1e9),m=$('btm').value,n=hi-lo,use=$('btc').checked,c=use?Math.max(0,+$('con').value||0):0,st=use?(+$('val').value||c||10000):10000;
+if(n<12){el.innerHTML=`<p class='fine'>These holdings share less than a year of history, so there is nothing to backtest.</p>`;return}
+const all=W.map(w=>btRun(w.A,lo,hi,m,st,c)).concat(ok?[btRun(bw.A,lo,hi,m,st,c)]:[]),nm=NAMES.map((x,i)=>x||'Portfolio '+'ABC'[i]).concat(ok?['VTI (benchmark)']:[]),CO=['var(--c1)','var(--c2)','var(--c3)','var(--mute)'];
+const Wd=640,Ht=260,L=56,R=12,T=12,B=26,mx=Math.max(...all.map(r=>Math.max(...r.val)))*1.05,X=i=>L+i/n*(Wd-L-R),Y=v=>T+(1-v/mx)*(Ht-T-B);let g='';for(let i=0;i<=4;i++){const v=mx*i/4;g+=`<line x1='${L}' x2='${Wd-R}' y1='${Y(v)}' y2='${Y(v)}' stroke='var(--line)'/><text x='${L-6}' y='${Y(v)+4}' text-anchor='end'>${short(v)}</text>`}
+for(let i=0;i<n;i+=Math.ceil(n/72)*12)g+=`<text x='${X(i)}' y='${Ht-8}' text-anchor='middle'>${MD.months[lo+i].slice(0,4)}</text>`;
+const ps=all.map((r,k)=>`<path d='${r.val.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join('')}' fill='none' stroke='${CO[k]}' stroke-width='2.2' stroke-dasharray='${k===3?'5 4':'none'}'/>`).join('');
+const row=(l,f)=>`<tr><td style='text-align:left'>${l}</td>${all.map(r=>`<td>${f(r)}</td>`).join('')}</tr>`,yy=y=>y?`${y[0]}: <span style='color:var(--${y[1]<0?'acc2':'acc'})'>${y[1]>0?'+':''}${pc(y[1]*100,0)}</span>`:'n/a';
+const MN={y:'yearly',q:'quarterly',m:'monthly',n:'never',b:'whenever a holding is 5 points or 25% off its target'},px=[...new Set(W.flatMap(w=>w.A).filter(a=>a.d.p>0&&a.d.s+a.d.p>lo).map(a=>`${a.t} before ${MD.months[a.d.s+a.d.p]} (uses ${a.d.x})`))];
+el.innerHTML=`<svg class='chart' viewBox='0 0 640 260' role='img' aria-label='Portfolio value over time'>${g}${ps}</svg><div class='lg' style='margin:6px 0 10px'>${nm.map((x,k)=>`<span><i class='sw' style='background:${CO[k]};height:8px;width:8px;border-radius:50%'></i>${esc(x)}</span>`).join('')}</div><div class='scroll'><table><tr><th></th>${nm.map(x=>`<th>${esc(x)}</th>`).join('')}</tr>${row('Total put in',r=>money(r.put))}${row('Ending value',r=>money(r.val[r.n]))}${row('Annual return',r=>pc(r.cagr*100,1))}${row('Volatility',r=>pc(r.vol*100,1))}${row('Worst drawdown',r=>`<span style='color:var(--acc2)'>${pc(r.dd*100,0)}</span><br><span class='fine'>${r.pi} to ${r.ti}</span>`)}${row('Best full year',r=>yy(r.best))}${row('Worst full year',r=>yy(r.worst))}${row('Times rebalanced',r=>r.nr)}</table></div><p class='fine'>Period: ${MD.months[lo]} to ${MD.months[hi-1]} (${(n/12).toFixed(1)} years). Starting with ${money(st)}${c?` and adding ${money(c)} every month at the target weights`:''}; rebalanced ${MN[m]}. Annual return, volatility and drawdown measure the investments alone, so your deposits do not inflate them. A drawdown is the fall from a previous peak to the lowest point after it.${px.length?` Before some funds existed I borrowed history from a similar older asset: ${esc(px.join('; '))}. Those months are approximate.`:''}</p>`}
+$('btm').onchange=bt;$('btc').onchange=bt;
+function applyData(){Object.keys(E).forEach(k=>{E[k]=BASE[k].slice()});if(!MD)return 0;let n=0;const raw=$("raw").checked;
+Object.keys(MD.data).forEach(k=>{const h=MD.data[k];if(!E[k]||USER[k]||!isFinite(h.ret)||!isFinite(h.vol))return;const g=h.ret+E[k][3];E[k][4]=raw?g:.5*g+.5*BASE[k][4];E[k][5]=Math.max(1,h.vol);E[k][6]=Math.max(0,h.y||0);n++});return n}
+function setMD(o,save){if(!o||!o.data)throw 0;MD=o;RC=null;const n=applyData();$("mst").textContent=`Using real history for ${n} tickers (${o.years} years, as of ${o.asOf}). Others use built-in assumptions.`;if(save){try{localStorage.setItem("pa-md",JSON.stringify(o))}catch(e){}}update()}
+$("mf").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{setMD(JSON.parse(r.result),true)}catch(x){$("mst").textContent="That file isn’t a valid market-data.json."}};r.readAsText(f)};
+$("raw").onchange=()=>{if(MD){applyData();update()}};
+$("dlt").onclick=async()=>{try{const d=window.claude&&await claude.use("downloads");if(!d){$("mst").textContent="Saving files isn’t available in this view.";return}await d.save({filename:"tickers.txt",data:Object.keys(BASE).join("\n")})}catch(e){}};
+try{const s=localStorage.getItem("pa-md");if(s)setMD(JSON.parse(s),false)}catch(e){}
+function renderTabs(){$("tabs").innerHTML=NAMES.map((n,i)=>`<button class="btn${i===cur?" main":""}" data-i="${i}">${esc(n||"Portfolio "+"ABC"[i])}</button>`).join("");if($("pn").value!==NAMES[cur])$("pn").value=NAMES[cur];document.querySelectorAll("#tabs .btn").forEach(b=>b.onclick=()=>{cur=+b.dataset.i;H=PF[cur];renderTabs();renderHolds();update()})}
+function pm(h){return withH(h,()=>{const c=calc(),V=+$("val").value||0,C=(+$("con").value||0)*12,Y=Math.min(50,Math.max(1,Math.round(+$("yrs").value||1))),t=(+$("tr").value||0)/100,a=$("acct").value,sg=c.vol/100,mu=c.ret/100;let d=0;
+h.forEach((x,i)=>{const e=E[x.t],y=e[6]/100,w=c.w[i],R=e[2];if(a==="tax")d+=w*y*t*(R==="Canada"&&e[1]==="Equity"?.65:1);else if(a==="k401"||a==="ira"||a==="roth")d+=w*y*({US:0,Canada:0,Global:.075,International:.1,Emerging:.1}[R]||0);else if(!(a==="rrsp"&&R==="US"&&e[1]!=="Real estate"&&!/\.TO$|^(XIC|VFV|XEQT|VEQT|XBB)$/.test(x.t)))d+=w*y*({US:.15,Global:.075,International:.1,Emerging:.1,Canada:0}[R]||0)});
+const put=V+C*Y,med=path(V,C,mu,sg,0,Y)[Y],lo=path(V,C,mu,sg,-1.2816,Y)[Y],ma=path(V,C,mu-d,sg,0,Y)[Y];
+const net=a==="tfsa"||a==="roth"||a==="fhsa"||a==="resp"?ma:a==="rrsp"||a==="k401"||a==="ira"?ma*(1-t):ma-.5*t*Math.max(0,ma-put);
+const st=Object.keys(ST).map(s=>h.reduce((q,x,i)=>q+c.w[i]*shock(E[x.t],s),0));const f=df(Y);return{c,d,med:med*f,lo:lo*f,net:net*f,st}})}
+function pies(){$("pies").innerHTML=PF.map((h,k)=>{const tot=h.reduce((s,x)=>s+x.w,0)||1;let s=h.map(x=>({t:x.t,v:x.w/tot})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v);
+if(s.length>6){const o=s.slice(5).reduce((q,x)=>q+x.v,0);s=s.slice(0,5).concat([{t:"Other",v:o}])}
+let a=-Math.PI/2,p="";const R=62,r=38,P=(q,d)=>(70+d*Math.cos(q)).toFixed(1)+" "+(70+d*Math.sin(q)).toFixed(1);
+s.forEach((x,i)=>{if(x.v>.999){p+=`<circle cx="70" cy="70" r="${(R+r)/2}" fill="none" stroke="${COL[i]}" stroke-width="${R-r}"/>`;return}const f=Math.min(x.v,.9999)*2*Math.PI,e=a+f,l=f>Math.PI?1:0;p+=`<path d="M${P(a,R)}A${R} ${R} 0 ${l} 1 ${P(e,R)}L${P(e,r)}A${r} ${r} 0 ${l} 0 ${P(a,r)}Z" fill="${COL[i]}"/>`;a+=x.v*2*Math.PI});
+return`<div class="pie${k===cur?" on":""}" data-k="${k}"><svg viewBox="0 0 140 140" role="img" aria-label="Portfolio ${"ABC"[k]} mix">${p}<text x="70" y="78" text-anchor="middle" style="font:600 24px Newsreader,Georgia,serif;fill:var(--ink)">${"ABC"[k]}</text></svg><div class="lg">${s.map((x,i)=>`<span><i class="sw" style="background:${COL[i]};height:8px;width:8px;border-radius:50%"></i>${x.t} ${pc(x.v*100,0)}</span>`).join("")}</div></div>`}).join("");
+document.querySelectorAll(".pie").forEach(e=>e.onclick=()=>{cur=+e.dataset.k;H=PF[cur];renderTabs();renderHolds();update()})}
+function compare(){pies();const M=PF.map(pm);const rows=[["Expected return after fees",m=>pc(m.c.ret)],["Volatility",m=>pc(m.c.vol)],["Blended fee",m=>pc(m.c.er,2)],["Income yield",m=>pc(m.c.y)],["Tax and withholding drag per year",m=>pc(m.d*100,2)],["Poor case (1 in 10), before tax",m=>money(m.lo)],["Median outcome, before tax",m=>money(m.med)],["Median outcome, after tax",m=>money(m.net)]].concat(Object.keys(ST).map((s,k)=>[s,m=>{const v=m.st[k];return`<span style="color:var(--${v<0?"acc2":"acc"})">${v>0?"+":""}${pc(v,0)}</span>`}]));
+$("cmp").innerHTML="<tr><th></th>"+NAMES.map((n,i)=>`<th${i===cur?' style="color:var(--ink)"':""}>${esc(n||"Portfolio "+"ABC"[i])}</th>`).join("")+"</tr>"+rows.map(r=>`<tr><td>${r[0]}</td>${M.map(m=>`<td>${r[1](m)}</td>`).join("")}</tr>`).join("");
+const a=$("acct").value;$("cmpn").textContent=($("real").checked?"Dollar figures are in today’s dollars. ":"")+({tfsa:"TFSA: growth and withdrawals are tax-free, but foreign dividend withholding (about 15% on US) still applies.",rrsp:"RRSP: US-listed funds and US stocks avoid US withholding under the Canada–US treaty (Canadian-listed funds and REITs do not), growth is tax-deferred, and the after-tax figure assumes you withdraw everything at the tax rate above.",k401:"401(k): contributions are assumed pre-tax, growth is tax-deferred, and the after-tax figure assumes you withdraw everything at the tax rate above. Employer match, early-withdrawal penalties before age 59½ and required minimum distributions are not modeled.",ira:"Traditional IRA: growth is tax-deferred, and the after-tax figure assumes you withdraw everything at the tax rate above. Deductibility limits, early-withdrawal penalties and required minimum distributions are not modeled.",fhsa:"FHSA: contributions are tax-deductible, and growth and qualifying first-home withdrawals are tax-free. US dividend withholding (about 15%) still applies, as in a TFSA. Limits are $8,000 a year and $40,000 for life.",resp:"RESP: growth is tax-deferred and the government adds a 20% grant on the first $2,500 you contribute each year, up to $7,200 per child. This estimate does not add the grant or the tax the student pays on withdrawal, and US dividend withholding (about 15%) still applies.",roth:"Roth IRA: growth and qualified withdrawals are tax-free. Contribution limits, income limits and the age 59½ and five-year rules are not modeled.",tax:"Taxable: yield is taxed each year at your rate (Canadian stock dividends at about 65% of it), and half of the final gain is taxed on sale."})[a]+" Stress rows use index returns; see Sources for which are verified and which are estimates. This is a simplified estimate, not tax advice."}
+renderTabs();
+["val","con","yrs","acct","tr","inf","real","rc"].forEach(id=>$(id).oninput=()=>update());
+(function(){
+const GL={"Expected return after fees":"Average yearly growth assumed after fund fees.","Typical yearly swing (volatility)":"How much the value usually moves up or down in a year. Higher means a bumpier ride.","Blended expense ratio":"The yearly fund fee (MER), averaged across your holdings.","Fees in year one":"What fund fees cost you in the first year."};
+const nm=()=>NAMES[cur]||"Portfolio "+"ABC"[cur];
+function txt(){const c=calc(),m=pm(H),tot=H.reduce((s,h)=>s+h.w,0)||1;return [nm()+" — "+$("acct").selectedOptions[0].text,""].concat(H.map(h=>h.t+" ("+E[h.t][0]+"): "+Math.round(h.w/tot*1000)/10+"%"),["","Start "+money(+$("val").value||0)+", add "+money(+$("con").value||0)+"/month, "+($("yrs").value||1)+" years","Expected return after fees: "+pc(c.ret),"Volatility: "+pc(c.vol),"Blended fee: "+pc(c.er,2),"Typical outcome: "+money(m.med)+"; poor case: "+money(m.lo),"","Educational estimate using editable long-run assumptions, not financial, tax or investment advice."]).join("\n")}
+function save(){try{localStorage.setItem("pfa",JSON.stringify({PF:PF,N:NAMES,cur:cur,v:["val","con","yrs","acct"].map(i=>$(i).value)}))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem("pfa")||"null");if(!s||!s.PF||s.PF.length!==3)return;s.PF.forEach((p,i)=>{const f=p.filter(h=>E[h.t]);PF[i]=f.length?f:[{t:"VTI",w:100}]});s.N.forEach((n,i)=>NAMES[i]=n);cur=s.cur>=0&&s.cur<3?s.cur:0;H=PF[cur];["val","con","yrs","acct"].forEach((id,i)=>{if(s.v[i]!=null)$(id).value=s.v[i]});renderTabs()}catch(e){}}
+const U=update;
+update=function(k){U(k);try{document.querySelectorAll(".stat .k").forEach(e=>{const t=GL[e.textContent.trim()];if(t)e.title=t});const m=pm(H),Y=Math.min(50,Math.max(1,Math.round(+$("yrs").value||1))),d=Math.round(m.st[0]);$("sum").innerHTML="Over "+Y+" years this mix could grow to about <b>"+money(m.med)+"</b> (poor case: about "+money(m.lo)+"). In a 2008-style year it would have "+(d<0?"lost":"gained")+" about <b>"+Math.abs(d)+"%</b>. <span style=\"color:var(--mute)\">"+esc($("mst").textContent)+"</span>"}catch(e){}};
+$("tk").innerHTML=Object.keys(E).map(k=>'<option value="'+esc(k)+'" label="'+esc(E[k][0])+'">').join("");
+$("th").onclick=()=>{const r=document.documentElement,d=(r.dataset.theme||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"))==="dark";r.dataset.theme=d?"light":"dark"};
+$("em").onclick=()=>{const a=$("ea").value.trim(),m=$("emsg");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(a)){m.textContent="Enter a valid email address, like name@example.com.";return}const l=$("ml");l.href="mailto:"+a+"?subject="+encodeURIComponent("My portfolio: "+nm())+"&body="+encodeURIComponent(txt());l.click();m.textContent="Your email app should open with the draft. Press send to email it to yourself. If nothing opens, use Copy summary."};
+$("cp").onclick=async()=>{try{await navigator.clipboard.writeText(txt());$("emsg").textContent="Copied. Paste it anywhere."}catch(e){$("emsg").textContent="Couldn’t copy here. Try the email or download button instead."}};
+})();
+(function(){const C=["Real market data","Assumptions","Portfolio mixes","Backtest and correlations","Example portfolios by risk level","Rebalance this portfolio","Compare portfolios and stress tests","Things worth a look","Save or email this portfolio"];document.querySelectorAll("section.panel").forEach(s=>{const h=s.querySelector("h2");if(!h||!C.includes(h.firstChild.textContent.trim()))return;const d=document.createElement("details"),m=document.createElement("summary"),w=document.createElement("div");d.className=s.className+" sec";if(s.id)d.id=s.id;m.textContent=h.textContent;w.className="in";h.remove();while(s.firstChild)w.appendChild(s.firstChild);d.append(m,w);s.replaceWith(d)})})();
+(function(){var N=["Save or email this portfolio","Portfolio mixes","Backtest and correlations","Example portfolios by risk level","Rebalance this portfolio","Compare portfolios and stress tests","Things worth a look"];var ds=Array.prototype.filter.call(document.querySelectorAll("details.sec"),function(d){var s=d.querySelector("summary");return s&&N.indexOf(s.textContent.trim())>-1});if(!ds.length)return;var w=document.createElement("details"),m=document.createElement("summary"),i=document.createElement("div");w.className="panel sec";w.id="more-tools";m.textContent="More tools";i.className="in";ds[0].parentNode.insertBefore(w,ds[0]);ds.forEach(function(d){i.appendChild(d)});w.append(m,i)})();
+renderHolds();update();
+(function(){const g=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value");
+const fmt=v=>{v=String(v).replace(/[^0-9.]/g,"");const p=v.split(".");const i=p[0].replace(/^0+(?=\d)/,"").replace(/\B(?=(\d{3})+(?!\d))/g,",");return p.length>1?i+"."+p.slice(1).join("").slice(0,2):i};
+["val","con","rc"].forEach(id=>{const el=document.getElementById(id);if(!el)return;
+el.type="text";el.inputMode="decimal";el.autocomplete="off";
+Object.defineProperty(el,"value",{get(){return g.get.call(el).replace(/,/g,"")},set(v){g.set.call(el,v==null||v===""?"":fmt(v))},configurable:true});
+g.set.call(el,fmt(g.get.call(el)));
+el.addEventListener("input",()=>{const raw=g.get.call(el),pos=el.selectionStart,d=raw.slice(0,pos).replace(/[^0-9.]/g,"").length,f=fmt(raw);g.set.call(el,f);let n=0,c=0;while(c<f.length&&n<d){if(/[0-9.]/.test(f[c]))n++;c++}el.setSelectionRange(c,c)})})})();
+(function(){const D=Array.from(document.querySelectorAll("details.mini"));
+D.forEach(d=>d.addEventListener("toggle",()=>{if(d.open)D.forEach(o=>{if(o!==d)o.open=false})}));
+document.addEventListener("click",e=>{D.forEach(d=>{if(d.open&&!d.contains(e.target))d.open=false})});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")D.forEach(d=>{d.open=false})})})();
+(function(){const $=id=>document.getElementById(id),f=n=>"$"+Math.round(n).toLocaleString("en-CA");
+function room(){const a=$("acct").value,V=+$("val").value||0,C=(+$("con").value||0)*12,Y=Math.max(1,+$("yrs").value||1),T=V+C*Y,o=$("room");let i="",w=[];
+if(a==="tfsa"){i="2026 TFSA room: $7,000 new each year, up to $109,000 in total if you have been eligible since 2009.";if(C>7000)w.push("Adding "+f(C)+" a year is above the $7,000 yearly limit. That only works if you have unused room carried forward.");if(V>109000)w.push("Your starting amount is above the most TFSA room anyone can have in 2026 ($109,000).")}
+else if(a==="rrsp"){i="2026 RRSP limit: the lesser of 18% of last year’s earned income and $33,810, plus any unused room.";if(C>33810)w.push("Adding "+f(C)+" a year is above the $33,810 dollar limit.")}
+else if(a==="fhsa"){i="FHSA limits: $8,000 a year and $40,000 for life.";if(C>8000)w.push("Adding "+f(C)+" a year is above the $8,000 yearly limit (unused room carries forward, up to $8,000).");if(T>40000)w.push("Total contributions reach "+f(T)+", above the $40,000 lifetime limit.")}
+else if(a==="resp"){i="RESP: the 20% government grant applies to the first $2,500 you add per child each year (up to $7,200 per child); lifetime contributions are capped at $50,000 per child.";if(C>2500)w.push("Only the first $2,500 a year earns the 20% grant; extra years of unused grant room can be caught up.");if(T>50000)w.push("Total contributions reach "+f(T)+", above the $50,000 lifetime limit per child.")}
+if(!i){o.hidden=true;o.textContent="";return}
+o.hidden=false;o.textContent=i+(w.length?" ":"");if(w.length){const b=document.createElement("span");b.style.color="var(--acc2)";b.textContent=w.join(" ");o.appendChild(b)}}
+["val","con","yrs","acct"].forEach(id=>{$(id).addEventListener("input",room);$(id).addEventListener("change",room)});room()})();
+(function(){const w=document.getElementById("welcome");if(!w)return;let seen=false;try{seen=!!localStorage.getItem("mf_seen")}catch(e){}
+if(seen)return;w.hidden=false;
+function close(){w.hidden=true;try{localStorage.setItem("mf_seen","1")}catch(e){}}
+w.querySelectorAll("[data-t]").forEach(b=>b.addEventListener("click",()=>{const t=Array.from(document.querySelectorAll("#tpl button")).find(x=>x.textContent.trim()===b.dataset.t);if(t)t.click();close()}));
+document.getElementById("wx").addEventListener("click",close)})();
+</script>
+</body>
+</html>
