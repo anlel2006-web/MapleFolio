@@ -3,7 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MapleFolio</title>
+<title>MapleFolio – Canadian portfolio and TFSA planner</title>
+<meta name="description" content="Build a mix of ETFs and stocks and see what it could grow to. Covers TFSA and RRSP room, account types and stress tests. Free and educational, not financial advice.">
+<meta name="theme-color" content="#1f6fb2">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MapleFolio">
+<meta property="og:title" content="MapleFolio – Canadian portfolio and TFSA planner">
+<meta property="og:description" content="Build a mix of ETFs and stocks and see what it could grow to. Free and educational, not financial advice.">
+<meta property="og:url" content="https://anlel2006-web.github.io/MapleFolio/">
+<meta property="og:image" content="https://anlel2006-web.github.io/MapleFolio/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍁%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
@@ -20,7 +30,7 @@ body{border-top:6px solid var(--acc)}
 .panel{border-radius:14px;border-color:transparent;box-shadow:0 1px 3px rgba(20,40,60,.1);padding:22px}.panel+.panel{margin-top:12px}.stats{border-color:transparent;box-shadow:0 1px 3px rgba(20,40,60,.1);border-radius:14px}.wrap{padding-top:36px}
 #sum{font-size:17px;line-height:1.55}
 details.sec{padding:0}details.sec>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;font:600 19px/1.2 Newsreader,Georgia,serif}details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::after{content:"+";font:400 24px sans-serif;color:var(--mute)}details.sec[open]>summary::after{content:"–"}details.sec>.in{padding:0 22px 22px}
-details.panel summary{cursor:pointer;font-weight:600}#mkt{display:none}#bt{display:none}details.sec>summary{padding:12px 18px;font-size:17px}#more-tools>.in{padding-top:0}#more-tools>.in>details.sec{box-shadow:none;border:1px solid var(--line);margin-top:10px}details.panel ol{margin:8px 0 0;padding-left:20px}
+details.panel summary{cursor:pointer;font-weight:600}#mkt{display:none}#btsec{display:none}details.sec>summary{padding:12px 18px;font-size:17px}#more-tools>.in{padding-top:0}#more-tools>.in>details.sec{box-shadow:none;border:1px solid var(--line);margin-top:10px}details.panel ol{margin:8px 0 0;padding-left:20px}
 h1{display:flex;align-items:center;gap:10px}
 .leaf{width:1.15em;height:1.15em;flex:none;fill:var(--acc)}
 .leaf .lf{fill:var(--acc);stroke:var(--acc);stroke-width:3;stroke-linejoin:round}
@@ -164,7 +174,7 @@ details.mini>.mc{left:0;right:0;width:auto}
 </section>
 <section class="panel"><h2>Save or email this portfolio</h2><p class="fine" style="margin-top:0">Saved automatically in this browser.</p><label for="ea">Your email address</label><input id="ea" type="email" placeholder="name@example.com" autocomplete="email"><div class="btns"><button class="btn main" id="em">Email me this portfolio</button><button class="btn" id="cp">Copy summary</button><a id="ml" hidden target="_blank" rel="noopener"></a></div><div class="tot" id="emsg"></div><p class="fine">Opens your own email app. This page never sees your address.</p></section>
 <section class="panel"><h2>Portfolio mixes</h2><div class="pies" id="pies"></div></section>
-<section class="panel" id="bt"><h2>Backtest and correlations</h2><p class="fine" style="margin-top:0">Replays portfolios A, B and C through real monthly returns (dividends included) while every holding has data. Ignores taxes, trading costs and account type. Past results do not predict future returns.</p><label for="btm">Rebalance</label><select id="btm" style="max-width:160px"><option value="y">Yearly</option><option value="q">Quarterly</option><option value="m">Monthly</option><option value="n">Never</option><option value="b">When 5 points or 25% off target (bands)</option></select><label style="display:flex;gap:8px;align-items:center;margin:10px 0;color:var(--ink)"><input type="checkbox" id="btc" style="width:auto" checked>Use my starting amount and monthly contribution</label><div id="bt"></div><p style="margin:16px 0 6px"><b>Correlations in the selected portfolio</b></p><div class="scroll"><table id="hm"></table></div><p class="fine" id="hmn"></p></section>
+<section class="panel" id="btsec"><h2>Backtest and correlations</h2><p class="fine" style="margin-top:0">Replays portfolios A, B and C through real monthly returns (dividends included) while every holding has data. Ignores taxes, trading costs and account type. Past results do not predict future returns.</p><label for="btm">Rebalance</label><select id="btm" style="max-width:160px"><option value="y">Yearly</option><option value="q">Quarterly</option><option value="m">Monthly</option><option value="n">Never</option><option value="b">When 5 points or 25% off target (bands)</option></select><label style="display:flex;gap:8px;align-items:center;margin:10px 0;color:var(--ink)"><input type="checkbox" id="btc" style="width:auto" checked>Use my starting amount and monthly contribution</label><div id="bt"></div><p style="margin:16px 0 6px"><b>Correlations in the selected portfolio</b></p><div class="scroll"><table id="hm"></table></div><p class="fine" id="hmn"></p></section>
 <section class="panel"><h2>Example portfolios by risk level</h2><p class="fine" style="margin-top:0">Three starting mixes, from most growth to most safety. Load one, then change it. Illustrations, not advice.</p><div id="ex"></div></section>
 <section class="panel"><h2>Rebalance this portfolio</h2><p class="fine" style="margin-top:0">Enter what you hold now to see what to buy or sell to reach your targets. The last column splits new cash without selling.</p><label for="rc">New cash to add ($)</label><input id="rc" type="number" min="0" step="100" value="0" style="max-width:160px"><div class="scroll" style="margin-top:10px"><table id="rb"></table></div></section><section class="panel"><h2>Compare portfolios and stress tests</h2><div class="scroll"><table id="cmp"></table></div><p class="fine" id="cmpn"></p></section>
 <section class="panel notes"><h2>Things worth a look</h2><div id="ins"></div></section>
@@ -403,6 +413,7 @@ $("mf").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileRead
 $("raw").onchange=()=>{if(MD){applyData();update()}};
 $("dlt").onclick=async()=>{try{const d=window.claude&&await claude.use("downloads");if(!d){$("mst").textContent="Saving files isn’t available in this view.";return}await d.save({filename:"tickers.txt",data:Object.keys(BASE).join("\n")})}catch(e){}};
 try{const s=localStorage.getItem("pa-md");if(s)setMD(JSON.parse(s),false)}catch(e){}
+fetch("market-data.json",{cache:"no-cache"}).then(r=>r.ok?r.json():Promise.reject()).then(o=>setMD(o,false)).catch(()=>{});
 function renderTabs(){$("tabs").innerHTML=NAMES.map((n,i)=>`<button class="btn${i===cur?" main":""}" data-i="${i}">${esc(n||"Portfolio "+"ABC"[i])}</button>`).join("");if($("pn").value!==NAMES[cur])$("pn").value=NAMES[cur];document.querySelectorAll("#tabs .btn").forEach(b=>b.onclick=()=>{cur=+b.dataset.i;H=PF[cur];renderTabs();renderHolds();update()})}
 function pm(h){return withH(h,()=>{const c=calc(),V=+$("val").value||0,C=(+$("con").value||0)*12,Y=Math.min(50,Math.max(1,Math.round(+$("yrs").value||1))),t=(+$("tr").value||0)/100,a=$("acct").value,sg=c.vol/100,mu=c.ret/100;let d=0;
 h.forEach((x,i)=>{const e=E[x.t],y=e[6]/100,w=c.w[i],R=e[2];if(a==="tax")d+=w*y*t*(R==="Canada"&&e[1]==="Equity"?.65:1);else if(a==="k401"||a==="ira"||a==="roth")d+=w*y*({US:0,Canada:0,Global:.075,International:.1,Emerging:.1}[R]||0);else if(!(a==="rrsp"&&R==="US"&&e[1]!=="Real estate"&&!/\.TO$|^(XIC|VFV|XEQT|VEQT|XBB)$/.test(x.t)))d+=w*y*({US:.15,Global:.075,International:.1,Emerging:.1,Canada:0}[R]||0)});
